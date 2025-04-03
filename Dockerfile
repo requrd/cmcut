@@ -7,11 +7,12 @@ ENV EPGSTATION_VERSION=v2.9.1
 RUN set -xe && \
     apt-get update && \
     apt-get install --no-install-recommends -y \
-    curl git make gcc g++ cmake libboost-all-dev
+    curl git make gcc g++ cmake libboost-all-dev ca-certificates
 
 # build jlse libs
 ADD lib /tmp/lib
-RUN mkdir /dist && \
+RUN set -xe && \
+    mkdir /dist && \
     cd /tmp/lib/chapter_exe/src && \
     make && \
     mv chapter_exe /dist && \
@@ -55,8 +56,7 @@ COPY --from=build /dist/libdelogo.so /usr/local/lib/avisynth/libdelogo.so
 COPY --from=build /tmp/EPGStation /app
 
 WORKDIR /join_logo_scp_trial
-RUN apt update && apt install -y ca-certificates && \    
-    bash setup_node.x && \
+RUN bash setup_node.x && \
     apt install --no-install-recommends -y nodejs libboost-filesystem-dev libboost-program-options-dev libboost-system-dev && \
     node -v && \
     npm --version && \
