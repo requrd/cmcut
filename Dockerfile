@@ -1,4 +1,4 @@
-FROM ghcr.io/tobitti0/docker-avisynthplus:5.1-ubuntu2004 as build
+FROM requrd/ffmpeg-l-smash-works:vaapi-6.1.2 AS build
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV NODE_VERSION=18
@@ -43,7 +43,7 @@ RUN set -xe && \
     cd /tmp && \
     git clone https://github.com/l3tnun/EPGStation.git -b ${EPGSTATION_VERSION}
 
-FROM ghcr.io/tobitti0/docker-avisynthplus:5.1-ubuntu2004 as release
+FROM requrd/ffmpeg-l-smash-works:vaapi-6.1.2 AS release
 ENV DEBIAN_FRONTEND=noninteractive
 ADD join_logo_scp_trial /join_logo_scp_trial
 COPY --from=build /dist/chapter_exe /join_logo_scp_trial/bin/chapter_exe
