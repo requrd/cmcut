@@ -1,8 +1,7 @@
 // ref. https://github.com/plife18/docker-epgstation/blob/main/epgstation/config/enc_vaapi.js
 import { spawn } from "child_process";
-import { execFile } from "child_process";
+import { getDuration } from "./getDuration.mjs";
 const ffmpeg = process.env.FFMPEG;
-const ffprobe = process.env.FFPROBE;
 
 const input = process.env.INPUT;
 const output = process.env.OUTPUT;
@@ -13,34 +12,6 @@ const args = ["-y"];
 const audioBitrate = "60k";
 const qp = 25;
 const videoFilter = "deinterlace_vaapi,scale_vaapi=h=720:w=-2";
-
-/**
- * 動画長取得関数
- * @param {string} filePath ファイルパス
- * @return number 動画長を返す (秒)
- */
-const getDuration = (filePath) => {
-  return new Promise((resolve, reject) => {
-    execFile(
-      ffprobe,
-      ["-v", "0", "-show_format", "-of", "json", filePath],
-      (err, stdout) => {
-        if (err) {
-          reject(err);
-
-          return;
-        }
-
-        try {
-          const result = JSON.parse(stdout);
-          resolve(parseFloat(result.format.duration));
-        } catch (err) {
-          reject(err);
-        }
-      }
-    );
-  });
-};
 
 // vaapi
 Array.prototype.push.apply(args, [
