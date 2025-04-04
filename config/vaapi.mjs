@@ -4,7 +4,7 @@ import { getDuration } from "./getDuration.mjs";
 import { getVaapiOptions } from "./getVaapiOptions.mjs";
 
 const ffmpeg = process.env.FFMPEG;
-const args = ["-y", "-i", process.env.INPUT].concat(getVaapiOptions());
+const args = getVaapiOptions(process.env.INPUT);
 args.push(process.env.OUTPUT);
 
 (async () => {

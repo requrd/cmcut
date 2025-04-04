@@ -4,7 +4,7 @@ const isDualMono = parseInt(process.env.AUDIOCOMPONENTTYPE, 10) == 2;
  * FFmpeg(vaapi)のオプションを作成する
  * @returns string[] - FFmpegの引数となるパラメータ
  */
-const getVaapiOptions = () => {
+const getVaapiOptions = (input) => {
   const args = ["-y"];
 
   // my settings
@@ -24,6 +24,8 @@ const getVaapiOptions = () => {
 
   // 字幕用
   Array.prototype.push.apply(args, ["-fix_sub_duration"]);
+  // input 設定
+  Array.prototype.push.apply(args, ["-i", input]);
   // ビデオストリーム設定
   Array.prototype.push.apply(args, ["-map", "0:v", "-c:v", "h264_vaapi"]);
   // インターレス解除
