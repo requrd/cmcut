@@ -1,6 +1,6 @@
 // ref. https://github.com/plife18/docker-epgstation/blob/main/epgstation/config/enc_vaapi.js
-const spawn = require("child_process").spawn;
-const execFile = require("child_process").execFile;
+import { spawn } from "child_process";
+import { execFile } from "child_process";
 const ffmpeg = process.env.FFMPEG;
 const ffprobe = process.env.FFPROBE;
 
