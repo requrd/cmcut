@@ -9,7 +9,7 @@ args.push(process.env.OUTPUT);
 
 (async () => {
   // 進捗計算のために動画の長さを取得
-  const duration = await getDuration(input);
+  const duration = await getDuration(process.env.INPUT);
 
   const child = spawn(ffmpeg, args);
 
