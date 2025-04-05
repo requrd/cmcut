@@ -1,28 +1,33 @@
 {
-  "build": {
-    "dockerfile": "./Dockerfile.dev"
-  },
-  "postCreateCommand": "bash",
-  "remoteUser": "vscode",
-  "containerEnv": {
-    "NODE_PATH": "/app/node_modules"
-  },
-  "mounts": [
-    "source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,type=bind,consistency=cached",
-    "source=${localWorkspaceFolder}/config,target=/app/config,type=bind,consistency=cached"
-  ],
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:1.1.10-18-bookworm",
+  // "build": {
+  //   "dockerfile": "./Dockerfile.dev"
+  // },
+  // "postCreateCommand": "bash",
+  // "remoteUser": "vscode",
+  // "containerEnv": {
+  //   "NODE_PATH": "/app/node_modules"
+  // },
+  // "mounts": [
+  //   "source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,type=bind,consistency=cached",
+  //   "source=${localWorkspaceFolder}/config,target=/app/config,type=bind,consistency=cached"
+  // ],
   "customizations": {
     "vscode": {
       "settings": {
         "editor.defaultFormatter": "esbenp.prettier-vscode",
         "[javascript]": {
           "editor.defaultFormatter": "esbenp.prettier-vscode"
-        },
-        "eslit": {
-          "nodePath": "/app/node_modules"
         }
+        // "eslit": {
+        //   "nodePath": "/app/node_modules"
+        // }
       },
-      "extensions": ["dbaeumer.vscode-eslint", "esbenp.prettier-vscode"]
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "crystal-spider.jsdoc-generator"
+      ]
     }
   }
 }
