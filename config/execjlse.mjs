@@ -88,4 +88,4 @@ const exec_jlse = async(options) => {
     //終了後にしたい処理があれば書く
   });
 };
-(exec_jlse(getFfmpegOptions()))();
+export { exec_jlse }
