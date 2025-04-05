@@ -26,8 +26,6 @@ const getVaapiOptions = (input) => {
 
   // 字幕用
   Array.prototype.push.apply(args, ["-fix_sub_duration"]);
-  // input 設定
-  Array.prototype.push.apply(args, ["-i", input]);
   // ビデオストリーム設定
   Array.prototype.push.apply(args, ["-map", "0:v", "-c:v", "h264_vaapi"]);
   // インターレス解除
