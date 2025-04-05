@@ -2,7 +2,9 @@ const isDualMono = parseInt(process.env.AUDIOCOMPONENTTYPE, 10) == 2;
 
 /**
  * FFmpeg(vaapi)のオプションを作成する
- * @returns string[] - FFmpegの引数となるパラメータ
+ *
+ * @param {string} input 入力ファイルの絶対パス
+ * @returns {string[]} FFmpegの引数となるパラメータ
  */
 const getVaapiOptions = (input) => {
   const args = ["-y"];
