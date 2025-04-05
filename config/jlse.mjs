@@ -8,7 +8,7 @@ import { updateProgress } from "./updateProgress.mjs";
  * jlseの引数を生成する
  * @param {string} input
  * @param {string} output
- * @returns
+ * @returns {string[]}
  */
 const getJlseArgs = (input, output) => [
   "-i",

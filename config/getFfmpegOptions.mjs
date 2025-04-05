@@ -3,7 +3,7 @@ const isDualMono = parseInt(process.env.AUDIOCOMPONENTTYPE, 10) == 2;
 
 /**
  * FFmpegのオプションを作成する
- * @returns string[] - FFmpegの引数となるパラメータ
+ * @returns {string[]} - FFmpegの引数となるパラメータ
  */
 const getFfmpegOptions = () => {
   const args = ["-y"];
