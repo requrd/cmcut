@@ -47,7 +47,7 @@ const getJlseProcess = (input, output, options) => {
  * @param {string[]} options ffmpegのオプション
  * @returns {*} 
  */
-const exec_jlse = async(options) => {
+const execJlse = async(options) => {
   const input = process.env.INPUT;
   //進捗管理用オブジェクト
   let progress = {
@@ -88,4 +88,4 @@ const exec_jlse = async(options) => {
     //終了後にしたい処理があれば書く
   });
 };
-export { exec_jlse }
+export { execJlse }
