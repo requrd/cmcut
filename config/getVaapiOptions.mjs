@@ -45,7 +45,7 @@ const getVaapiOptions = (input) => {
       "language=eng",
     ]);
   } else {
-    Array.prototype.push.apply(args, ["-map", "0:a"]);
+    Array.prototype.push.apply(args, ['-map', '0:a', '-map', '-0:13?', '-map', '-0:10?']);
   }
   Array.prototype.push.apply(args, ["-c:a", "libopus", "-strict", "-2"]);
   // 字幕ストリーム設定
