@@ -12,7 +12,9 @@ args.push(process.env.OUTPUT);
   // 進捗計算のために動画の長さを取得
   const duration = await getDuration(process.env.INPUT);
 
-  const child = spawn(ffmpeg, args, { stdio: "inherit" });
+  const child = spawn(ffmpeg, args);
+  // debug for ffmpeg
+  //const child = spawn(ffmpeg, args, { stdio: "inherit" });
 
   /**
    * エンコード進捗表示用に標準出力に進捗情報を吐き出す
