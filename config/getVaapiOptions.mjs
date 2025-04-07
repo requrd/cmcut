@@ -3,10 +3,9 @@ const isDualMono = parseInt(process.env.AUDIOCOMPONENTTYPE, 10) == 2;
 /**
  * FFmpeg(vaapi)のオプションを作成する
  *
- * @param {string} input 入力ファイルの絶対パス
  * @returns {string[]} FFmpegの引数となるパラメータ
  */
-const getVaapiOptions = (input) => {
+const getVaapiOptions = () => {
   const args = ["-y"];
 
   // my settings
@@ -45,7 +44,14 @@ const getVaapiOptions = (input) => {
       "language=eng",
     ]);
   } else {
-    Array.prototype.push.apply(args, ['-map', '0:a', '-map', '-0:13?', '-map', '-0:10?']);
+    Array.prototype.push.apply(args, [
+      "-map",
+      "0:a",
+      "-map",
+      "-0:13?",
+      "-map",
+      "-0:10?",
+    ]);
   }
   Array.prototype.push.apply(args, ["-c:a", "libopus", "-strict", "-2"]);
   // 字幕ストリーム設定
