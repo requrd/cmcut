@@ -1,5 +1,6 @@
 // ref. https://github.com/plife18/docker-epgstation/blob/main/epgstation/config/enc_vaapi.js
 import { spawn } from "child_process";
+import { fs } from "fs";
 import { getDuration } from "./getDuration.mjs";
 import { getVaapiOptions } from "./getVaapiOptions.mjs";
 
@@ -116,5 +117,16 @@ args.push(process.env.OUTPUT);
 
   process.on("SIGINT", () => {
     child.kill("SIGINT");
+  });
+
+  child.on("exit", (code) => {
+    console.error("Exited with code: " + String(code));
+    console.error("Output: " + String(output));
+    var stat = fs.statSync(output);
+    console.error(stat.size);
+    if (stat.size < 10 * 1024) {
+      console.error("File site too small (< 10k). Raising error");
+      throw new Error(1);
+    }
   });
 })();
