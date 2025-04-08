@@ -8,57 +8,21 @@ const isDualMono = parseInt(process.env.AUDIOCOMPONENTTYPE, 10) == 2;
  */
 const getVaapiOptions = (input) => {
   // my settings
-  const audioBitrate = "60k";
-  const qp = 25;
   const videoFilter = "deinterlace_vaapi,scale_vaapi=h=720:w=-2";
 
   const args = [];
-  // vaapi
   args.push(...vaapiOptions);
-
   // 字幕用
-  Array.prototype.push.apply(args, ["-fix_sub_duration"]);
+  args.push("-fix_sub_duration");
   // input 設定
   if (input) {
     args.push("-y", "-i", input);
   }
   args.push(...videoStreamOptions(videoFilter));
-  // オーディオストリーム設定
   args.push(...autdioStreamOptions(isDualMono));
   // 字幕ストリーム設定
-  Array.prototype.push.apply(args, ["-map", "0:s?", "-c:s", "mov_text"]);
-  // 品質設定
-  //Array.prototype.push.apply(args, ['-preset', 'veryfast', '-crf', '26']);
-
-  // Other my options ...
-  Array.prototype.push.apply(args, [
-    "-q",
-    "-1",
-    "-qp",
-    qp,
-    "-g",
-    "300",
-    "-bf",
-    "8",
-    "-i_qfactor",
-    "0.7143",
-    "-b_qfactor",
-    "1.3",
-    "-qmin",
-    "20",
-    "-qmax",
-    "51",
-    "-compression_level",
-    "0",
-    "-f",
-    "mp4",
-    "-ar",
-    "48000",
-    "-ab",
-    audioBitrate,
-    "-ac",
-    "2",
-  ]);
+  args.push("-map", "0:s?", "-c:s", "mov_text");
+  args.push(...qualityOptions);
   return args;
 };
 
@@ -109,4 +73,43 @@ const autdioStreamOptions = (isDualMono) => {
     : ["-map", "0:a", "-map", "-0:13?", "-map", "-0:10?"];
   return options.concat(["-c:a", "libopus", "-strict", "-2"]);
 };
+
+/**
+ * 品質オプション
+ *
+ * @returns {string[]}
+ */
+const qualityOptions = () => {
+  const audioBitrate = "60k";
+  const qp = 25;
+  return [
+    "-q",
+    "-1",
+    "-qp",
+    qp,
+    "-g",
+    "300",
+    "-bf",
+    "8",
+    "-i_qfactor",
+    "0.7143",
+    "-b_qfactor",
+    "1.3",
+    "-qmin",
+    "20",
+    "-qmax",
+    "51",
+    "-compression_level",
+    "0",
+    "-f",
+    "mp4",
+    "-ar",
+    "48000",
+    "-ab",
+    audioBitrate,
+    "-ac",
+    "2",
+  ];
+};
+
 export { getVaapiOptions };
