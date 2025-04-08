@@ -8,30 +8,14 @@ const isDualMono = parseInt(process.env.AUDIOCOMPONENTTYPE, 10) == 2;
  * @returns {string[]} - FFmpegの引数となるパラメータ
  */
 const getFfmpegOptions = (input) => {
-  const preset = "veryfast";
-  const crf = 23;
-
   const args = [];
   if (input) {
     args.push("-y", "-i", input);
   }
   args.push(...videoStreamOptions());
   args.push(...audioStreamOptions(isDualMono));
-  Array.prototype.push.apply(args, ["-ignore_unknown"]);
-
-  // その他設定
-  Array.prototype.push.apply(args, [
-    "-stats",
-    "-preset",
-    preset,
-    "-aspect",
-    "16:9",
-    "-crf",
-    crf,
-    "-f",
-    "mp4",
-  ]);
-  return args;
+  args.push("-ignore_unknown");
+  return args.concat(...qualityOptions());
 };
 
 /**
@@ -70,4 +54,25 @@ const audioStreamOptions = (isDualMono) =>
         "-ab 256k",
       ]
     : ["-c:a", "aac"];
+
+/**
+ * 品質オプション
+ *
+ * @returns {string[]}
+ */
+const qualityOptions = () => {
+  const preset = "veryfast";
+  const crf = 23;
+  return [
+    "-stats",
+    "-preset",
+    preset,
+    "-aspect",
+    "16:9",
+    "-crf",
+    crf,
+    "-f",
+    "mp4",
+  ];
+};
 export { getFfmpegOptions };
