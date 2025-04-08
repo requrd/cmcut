@@ -8,7 +8,9 @@ const isDualMono = parseInt(process.env.AUDIOCOMPONENTTYPE, 10) == 2;
  */
 const getVaapiOptions = (input) => {
   const args = [];
-  args.push(...vaapiOptions);
+  if (input) {
+    args.push(...vaapiOptions);
+  }
   // 字幕用
   args.push("-fix_sub_duration");
   // input 設定
@@ -104,4 +106,4 @@ const qualityOptions = () => {
   ];
 };
 
-export { getVaapiOptions };
+export { vaapiOptions, getVaapiOptions };
