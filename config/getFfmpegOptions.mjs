@@ -9,28 +9,23 @@ const isDualMono = parseInt(process.env.AUDIOCOMPONENTTYPE, 10) == 2;
  */
 const getFfmpegOptions = (input) => {
   const preset = "veryfast";
-  const codec = "libx264"; //libx264でエンコード
   const crf = 23;
-  const videoFilter = "yadif";
 
   const args = [];
   if (input) {
     args.push("-y", "-i", input);
   }
+  args.push(...videoStreamOptions());
   args.push(...audioStreamOptions(isDualMono));
   Array.prototype.push.apply(args, ["-ignore_unknown"]);
 
   // その他設定
   Array.prototype.push.apply(args, [
     "-stats",
-    "-vf",
-    videoFilter,
     "-preset",
     preset,
     "-aspect",
     "16:9",
-    "-c:v",
-    codec,
     "-crf",
     crf,
     "-f",
@@ -39,6 +34,16 @@ const getFfmpegOptions = (input) => {
   return args;
 };
 
+/**
+ * ビデオストリームオプション
+ *
+ * @returns {string[]}
+ */
+const videoStreamOptions = () => {
+  const codec = "libx264"; //libx264でエンコード
+  const videoFilter = "yadif";
+  return ["-c:v", codec, "-vf", videoFilter];
+};
 /**
  * オーディオストリームオプション
  *
