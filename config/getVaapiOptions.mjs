@@ -49,7 +49,7 @@ const videoStreamOptions = () => {
  * @returns {string[]}
  */
 const autdioStreamOptions = (isDualMono) => {
-  options = isDualMono
+  const options = isDualMono
     ? [
         "-filter_complex",
         "channelsplit[FL][FR]",
