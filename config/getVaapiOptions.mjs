@@ -110,7 +110,9 @@ const qualityOptions = (endocde_in_jlse) => {
     "-ac",
     "2",
   ];
-  return endocde_in_jlse ? ["-aspect", "16:9"].concat(options) : options;
+  return endocde_in_jlse
+    ? ["-stats", "-aspect", "16:9"].concat(options)
+    : options;
 };
 
 export { vaapiOptions, getVaapiOptions };
