@@ -20,7 +20,7 @@ const getVaapiOptions = (input) => {
   args.push(...autdioStreamOptions(isDualMono));
   // 字幕ストリーム設定
   args.push("-map", "0:s?", "-c:s", "mov_text");
-  return args.concat(qualityOptions());
+  return args.concat(qualityOptions(input === undefined));
 };
 
 const vaapiOptions = [
@@ -76,12 +76,13 @@ const autdioStreamOptions = (isDualMono) => {
 /**
  * 品質オプション
  *
+ * @param {boolean} endocde_in_jlse
  * @returns {string[]}
  */
-const qualityOptions = () => {
+const qualityOptions = (endocde_in_jlse) => {
   const audioBitrate = "60k";
   const qp = 25;
-  return [
+  const options = [
     "-q",
     "-1",
     "-qp",
@@ -109,6 +110,7 @@ const qualityOptions = () => {
     "-ac",
     "2",
   ];
+  return endocde_in_jlse ? ["-aspect", "16:9"].concat(options) : options;
 };
 
 export { vaapiOptions, getVaapiOptions };
