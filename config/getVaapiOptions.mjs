@@ -24,30 +24,7 @@ const getVaapiOptions = (input) => {
   }
   args.push(...videoStreamOptions(videoFilter));
   // オーディオストリーム設定
-  if (isDualMono) {
-    Array.prototype.push.apply(args, [
-      "-filter_complex",
-      "channelsplit[FL][FR]",
-      "-map",
-      "[FL]",
-      "-map",
-      "[FR]",
-      "-metadata:s:a:0",
-      "language=jpn",
-      "-metadata:s:a:1",
-      "language=eng",
-    ]);
-  } else {
-    Array.prototype.push.apply(args, [
-      "-map",
-      "0:a",
-      "-map",
-      "-0:13?",
-      "-map",
-      "-0:10?",
-    ]);
-  }
-  Array.prototype.push.apply(args, ["-c:a", "libopus", "-strict", "-2"]);
+  args.push(...autdioStreamOptions(isDualMono));
   // 字幕ストリーム設定
   Array.prototype.push.apply(args, ["-map", "0:s?", "-c:s", "mov_text"]);
   // 品質設定
@@ -109,4 +86,27 @@ const videoStreamOptions = (videoFilter) => [
   videoFilter,
 ];
 
+/**
+ * オーディオストリームオプション
+ *
+ * @param {boolean} isDualMono
+ * @returns {string[]}
+ */
+const autdioStreamOptions = (isDualMono) => {
+  options = isDualMono
+    ? [
+        "-filter_complex",
+        "channelsplit[FL][FR]",
+        "-map",
+        "[FL]",
+        "-map",
+        "[FR]",
+        "-metadata:s:a:0",
+        "language=jpn",
+        "-metadata:s:a:1",
+        "language=eng",
+      ]
+    : ["-map", "0:a", "-map", "-0:13?", "-map", "-0:10?"];
+  return options.concat(["-c:a", "libopus", "-strict", "-2"]);
+};
 export { getVaapiOptions };
