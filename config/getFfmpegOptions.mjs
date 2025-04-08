@@ -3,14 +3,20 @@ const isDualMono = parseInt(process.env.AUDIOCOMPONENTTYPE, 10) == 2;
 
 /**
  * FFmpegのオプションを作成する
+ *
+ * @param {string?} input
  * @returns {string[]} - FFmpegの引数となるパラメータ
  */
-const getFfmpegOptions = () => {
-  const args = ["-y"];
+const getFfmpegOptions = (input) => {
   const preset = "veryfast";
   const codec = "libx264"; //libx264でエンコード
   const crf = 23;
   const videoFilter = "yadif";
+
+  const args = ["-y"];
+  if (input) {
+    args.push("-i", input);
+  }
 
   if (isDualMono) {
     Array.prototype.push.apply(args, [
