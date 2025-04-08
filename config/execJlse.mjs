@@ -27,16 +27,15 @@ const getJlseArgs = (ffmpegOptions, hwOptions) => {
 
 /**
  * JLSEを実行中のサブプロセスを取得する
- * @param {string} input - 入力ファイルのパス
- * @param {string} output - 出力ファイルのパス
- * @param {string[]} options
+ * @param {string[]} ffmpegOptions - ffmpegのエンコードオプション
+ * @param {string[]?} hwOptions - ハードウェアアクセラレータの設定
  * @returns JLSEのサブプロセス
  */
-const getJlseProcess = (input, output, options) => {
+const getJlseProcess = (ffmpegOptions, hwOptions) => {
   const env = Object.create(process.env);
   env.HOME = "/root";
   // console.error(`env: ${JSON.stringify(env)}`);
-  return spawn("jlse", getJlseArgs(input, output, options), { env: env });
+  return spawn("jlse", getJlseArgs(ffmpegOptions, hwOptions), { env: env });
 };
 
 //メインの処理 ここから
