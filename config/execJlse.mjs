@@ -9,20 +9,21 @@ import { updateProgress } from "./updateProgress.mjs";
  * @param {string[]?} hwOptions
  * @returns {string[]}
  */
-const getJlseArgs = (ffmpegOptions, hwOptions) => [
-  "-i",
-  process.env.INPUT,
-  "-e",
-  "-g",
-  " " + hwOptions.reduce((prev, curr) => prev + " " + curr),
-  "-o",
-  " " + ffmpegOptions.reduce((prev, curr) => prev + " " + curr),
-  "-r",
-  "-d",
-  dirname(process.env.OUTPUT),
-  "-n",
-  basename(process.env.OUTPUT, extname(process.env.OUTPUT)),
-];
+const getJlseArgs = (ffmpegOptions, hwOptions) => {
+  const args = ["-i", process.env.INPUT, "-e"];
+  if (hwOptions) {
+    args.push("-g", " " + hwOptions.reduce((prev, curr) => prev + " " + curr));
+  }
+  return args.concat([
+    "-o",
+    " " + ffmpegOptions.reduce((prev, curr) => prev + " " + curr),
+    "-r",
+    "-d",
+    dirname(process.env.OUTPUT),
+    "-n",
+    basename(process.env.OUTPUT, extname(process.env.OUTPUT)),
+  ]);
+};
 
 /**
  * JLSEを実行中のサブプロセスを取得する
