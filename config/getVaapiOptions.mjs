@@ -7,9 +7,6 @@ const isDualMono = parseInt(process.env.AUDIOCOMPONENTTYPE, 10) == 2;
  * @returns {string[]} FFmpegの引数となるパラメータ
  */
 const getVaapiOptions = (input) => {
-  // my settings
-  const videoFilter = "deinterlace_vaapi,scale_vaapi=h=720:w=-2";
-
   const args = [];
   args.push(...vaapiOptions);
   // 字幕用
@@ -18,7 +15,7 @@ const getVaapiOptions = (input) => {
   if (input) {
     args.push("-y", "-i", input);
   }
-  args.push(...videoStreamOptions(videoFilter));
+  args.push(...videoStreamOptions());
   args.push(...autdioStreamOptions(isDualMono));
   // 字幕ストリーム設定
   args.push("-map", "0:s?", "-c:s", "mov_text");
@@ -37,17 +34,13 @@ const vaapiOptions = [
 /**
  * ビデオストリームオプション
  *
- * @param {string} videoFilter
  * @returns {string[]}
  */
-const videoStreamOptions = (videoFilter) => [
-  "-map",
-  "0:v",
-  "-c:v",
-  "h264_vaapi",
-  "-vf",
-  videoFilter,
-];
+const videoStreamOptions = () => {
+  const codec = "h264_vaapi";
+  const videoFilter = "deinterlace_vaapi,scale_vaapi=h=720:w=-2";
+  return ["-map", "0:v", "-c:v", codec, "-vf", videoFilter];
+};
 
 /**
  * オーディオストリームオプション
