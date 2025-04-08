@@ -22,8 +22,7 @@ const getVaapiOptions = (input) => {
   args.push(...autdioStreamOptions(isDualMono));
   // 字幕ストリーム設定
   args.push("-map", "0:s?", "-c:s", "mov_text");
-  args.push(...qualityOptions);
-  return args;
+  return args.concat(qualityOptions());
 };
 
 const vaapiOptions = [
