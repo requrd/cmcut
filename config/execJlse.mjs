@@ -12,7 +12,10 @@ import { updateProgress } from "./updateProgress.mjs";
 const getJlseArgs = (ffmpegOptions, hwOptions) => {
   const args = ["-i", process.env.INPUT, "-e"];
   if (hwOptions) {
-    args.push("-g", " " + hwOptions.reduce((prev, curr) => prev + " " + curr));
+    args.push(
+      "-g",
+      " -y " + hwOptions.reduce((prev, curr) => prev + " " + curr)
+    );
   }
   return args.concat([
     "-o",
@@ -49,7 +52,6 @@ const getJlseProcess = (ffmpegOptions, hwOptions) => {
  * @returns {*}
  */
 const execJlse = async (ffmpegOptions, hwOptions) => {
-  const input = process.env.INPUT;
   //進捗管理用オブジェクト
   let progress = {
     total_num: 0,

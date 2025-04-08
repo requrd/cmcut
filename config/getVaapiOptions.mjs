@@ -2,6 +2,7 @@ const isDualMono = parseInt(process.env.AUDIOCOMPONENTTYPE, 10) == 2;
 
 /**
  * FFmpeg(vaapi)のオプションを作成する
+ * 引数無しで呼ばれた場合、jlse用のオプションとしてオプションを作成する
  *
  * @param {string?} input
  * @returns {string[]} FFmpegの引数となるパラメータ
@@ -11,13 +12,11 @@ const getVaapiOptions = (input) => {
   if (input) {
     args.push(...vaapiOptions);
   }
-  // 字幕用
-  args.push("-fix_sub_duration");
   // input 設定
   if (input) {
     args.push("-y", "-i", input);
   }
-  args.push(...videoStreamOptions());
+  args.push(...videoStreamOptions(input === undefined));
   args.push(...autdioStreamOptions(isDualMono));
   // 字幕ストリーム設定
   args.push("-map", "0:s?", "-c:s", "mov_text");
@@ -31,16 +30,22 @@ const vaapiOptions = [
   "vaapi",
   "-hwaccel_output_format",
   "vaapi",
+  // 字幕用
+  "-fix_sub_duration",
 ];
 
 /**
  * ビデオストリームオプション
+ * jlseでは追加のオプションが必要になる
  *
+ * @param {boolean} endocde_in_jlse
  * @returns {string[]}
  */
-const videoStreamOptions = () => {
+const videoStreamOptions = (endocde_in_jlse) => {
   const codec = "h264_vaapi";
-  const videoFilter = "deinterlace_vaapi,scale_vaapi=h=720:w=-2";
+  const videoFilter =
+    (endocde_in_jlse ? "format=nv12,hwupload," : "") +
+    "deinterlace_vaapi,scale_vaapi=h=720:w=-2";
   return ["-map", "0:v", "-c:v", codec, "-vf", videoFilter];
 };
 
