@@ -13,9 +13,9 @@ const getFfmpegOptions = (input) => {
   const crf = 23;
   const videoFilter = "yadif";
 
-  const args = ["-y"];
+  const args = [];
   if (input) {
-    args.push("-i", input);
+    args.push("-y", "-i", input);
   }
 
   if (isDualMono) {

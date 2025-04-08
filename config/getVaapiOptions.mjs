@@ -7,13 +7,12 @@ const isDualMono = parseInt(process.env.AUDIOCOMPONENTTYPE, 10) == 2;
  * @returns {string[]} FFmpegの引数となるパラメータ
  */
 const getVaapiOptions = (input) => {
-  const args = ["-y"];
-
   // my settings
   const audioBitrate = "60k";
   const qp = 25;
   const videoFilter = "deinterlace_vaapi,scale_vaapi=h=720:w=-2";
 
+  const args = [];
   // vaapi
   Array.prototype.push.apply(args, [
     "-vaapi_device",
@@ -28,7 +27,7 @@ const getVaapiOptions = (input) => {
   Array.prototype.push.apply(args, ["-fix_sub_duration"]);
   // input 設定
   if (input) {
-    Array.prototype.push.apply(args, ["-i", input]);
+    args.push("-y", "-i", input);
   }
   // ビデオストリーム設定
   Array.prototype.push.apply(args, ["-map", "0:v", "-c:v", "h264_vaapi"]);
