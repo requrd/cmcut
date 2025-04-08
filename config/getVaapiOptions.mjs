@@ -14,14 +14,7 @@ const getVaapiOptions = (input) => {
 
   const args = [];
   // vaapi
-  Array.prototype.push.apply(args, [
-    "-vaapi_device",
-    "/dev/dri/renderD128",
-    "-hwaccel",
-    "vaapi",
-    "-hwaccel_output_format",
-    "vaapi",
-  ]);
+  args.push(...vaapiOptions);
 
   // 字幕用
   Array.prototype.push.apply(args, ["-fix_sub_duration"]);
@@ -29,10 +22,7 @@ const getVaapiOptions = (input) => {
   if (input) {
     args.push("-y", "-i", input);
   }
-  // ビデオストリーム設定
-  Array.prototype.push.apply(args, ["-map", "0:v", "-c:v", "h264_vaapi"]);
-  // インターレス解除
-  Array.prototype.push.apply(args, ["-vf", videoFilter]);
+  args.push(...videoStreamOptions(videoFilter));
   // オーディオストリーム設定
   if (isDualMono) {
     Array.prototype.push.apply(args, [
@@ -94,4 +84,29 @@ const getVaapiOptions = (input) => {
   ]);
   return args;
 };
+
+const vaapiOptions = [
+  "-vaapi_device",
+  "/dev/dri/renderD128",
+  "-hwaccel",
+  "vaapi",
+  "-hwaccel_output_format",
+  "vaapi",
+];
+
+/**
+ * ビデオストリームオプション
+ *
+ * @param {string} videoFilter
+ * @returns {string[]}
+ */
+const videoStreamOptions = (videoFilter) => [
+  "-map",
+  "0:v",
+  "-c:v",
+  "h264_vaapi",
+  "-vf",
+  videoFilter,
+];
+
 export { getVaapiOptions };
