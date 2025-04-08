@@ -1,27 +1,27 @@
 import { spawn } from "child_process";
 import { basename, extname, dirname } from "path";
 import { getDuration } from "./getDuration.mjs";
-import { getFfmpegOptions } from "./getFfmpegOptions.mjs";
 import { updateProgress } from "./updateProgress.mjs";
 
 /**
  * jlseの引数を生成する
- * @param {string} input
- * @param {string} output
- * @param {string[]} options
+ * @param {string[]} ffmpegOptions
+ * @param {string[]?} hwOptions
  * @returns {string[]}
  */
-const getJlseArgs = (input, output, options) => [
+const getJlseArgs = (ffmpegOptions, hwOptions) => [
   "-i",
-  input,
+  process.env.INPUT,
   "-e",
+  "-g",
+  " " + hwOptions.reduce((prev, curr) => prev + " " + curr),
   "-o",
-  " " + options.reduce((prev, curr) => prev + " " + curr),
+  " " + ffmpegOptions.reduce((prev, curr) => prev + " " + curr),
   "-r",
   "-d",
-  dirname(output),
+  dirname(process.env.OUTPUT),
   "-n",
-  basename(output, extname(output)),
+  basename(process.env.OUTPUT, extname(process.env.OUTPUT)),
 ];
 
 /**
@@ -44,10 +44,11 @@ const getJlseProcess = (input, output, options) => {
  * jlseを開始する
  *
  * @async
- * @param {string[]} options ffmpegのオプション
- * @returns {*} 
+ * @param {string[]} ffmpegOptions
+ * @param {string[]?} hwOptions
+ * @returns {*}
  */
-const execJlse = async(options) => {
+const execJlse = async (ffmpegOptions, hwOptions) => {
   const input = process.env.INPUT;
   //進捗管理用オブジェクト
   let progress = {
@@ -58,11 +59,11 @@ const execJlse = async(options) => {
     log_updated: false,
     log: "",
     // 進捗計算のために動画の長さを取得
-    duration: await getDuration(input),
+    duration: await getDuration(process.env.INPUT),
     steps: 4,
     step: 0,
   };
-  const child = getJlseProcess(input, process.env.OUTPUT, options);
+  const child = getJlseProcess(ffmpegOptions, hwOptions);
   /**
    * エンコード進捗表示用に標準出力に進捗情報を吐き出す
    * 出力する JSON
@@ -88,4 +89,4 @@ const execJlse = async(options) => {
     //終了後にしたい処理があれば書く
   });
 };
-export { execJlse }
+export { execJlse };
