@@ -17,28 +17,7 @@ const getFfmpegOptions = (input) => {
   if (input) {
     args.push("-y", "-i", input);
   }
-
-  if (isDualMono) {
-    Array.prototype.push.apply(args, [
-      "-filter_complex",
-      "channelsplit[FL][FR]",
-      "-map",
-      "0:v",
-      "-map",
-      "[FL]",
-      "-map",
-      "[FR]",
-      "-metadata:s:a:0",
-      "language=jpn",
-      "-metadata:s:a:1",
-      "language=eng",
-    ]);
-    Array.prototype.push.apply(args, ["-c:a ac3", "-ar 48000", "-ab 256k"]);
-  } else {
-    // audio dataをコピー
-    Array.prototype.push.apply(args, ["-c:a", "aac"]);
-  }
-
+  args.push(...audioStreamOptions(isDualMono));
   Array.prototype.push.apply(args, ["-ignore_unknown"]);
 
   // その他設定
@@ -59,4 +38,31 @@ const getFfmpegOptions = (input) => {
   ]);
   return args;
 };
+
+/**
+ * オーディオストリームオプション
+ *
+ * @param {boolean} isDualMono
+ * @returns { string[] }
+ */
+const audioStreamOptions = (isDualMono) =>
+  isDualMono
+    ? [
+        "-filter_complex",
+        "channelsplit[FL][FR]",
+        "-map",
+        "0:v",
+        "-map",
+        "[FL]",
+        "-map",
+        "[FR]",
+        "-metadata:s:a:0",
+        "language=jpn",
+        "-metadata:s:a:1",
+        "language=eng",
+        "-c:a ac3",
+        "-ar 48000",
+        "-ab 256k",
+      ]
+    : ["-c:a", "aac"];
 export { getFfmpegOptions };
