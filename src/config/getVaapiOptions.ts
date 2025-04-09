@@ -1,4 +1,6 @@
-const isDualMono = parseInt(process.env.AUDIOCOMPONENTTYPE, 10) == 2;
+import { getenv } from "./getenv.ts";
+// const videoHeight = parseInt(process.env.VIDEORESOLUTION, 10);
+const isDualMono = parseInt(getenv("AUDIOCOMPONENTTYPE"), 10) == 2;
 
 /**
  * FFmpeg(vaapi)のオプションを作成する
@@ -7,8 +9,8 @@ const isDualMono = parseInt(process.env.AUDIOCOMPONENTTYPE, 10) == 2;
  * @param {string?} input
  * @returns {string[]} FFmpegの引数となるパラメータ
  */
-const getVaapiOptions = (input) => {
-  const args = [];
+const getVaapiOptions = (input: string | undefined) => {
+  const args: string[] = [];
   if (input) {
     args.push(...vaapiOptions);
   }
@@ -41,7 +43,7 @@ const vaapiOptions = [
  * @param {boolean} endocde_in_jlse
  * @returns {string[]}
  */
-const videoStreamOptions = (endocde_in_jlse) => {
+const videoStreamOptions = (endocde_in_jlse: boolean) => {
   const codec = "h264_vaapi";
   const videoFilter =
     (endocde_in_jlse ? "format=nv12,hwupload," : "") + "deinterlace_vaapi";
@@ -54,7 +56,7 @@ const videoStreamOptions = (endocde_in_jlse) => {
  * @param {boolean} isDualMono
  * @returns {string[]}
  */
-const autdioStreamOptions = (isDualMono) => {
+const autdioStreamOptions = (isDualMono: boolean) => {
   const options = isDualMono
     ? [
         "-filter_complex",
@@ -78,10 +80,10 @@ const autdioStreamOptions = (isDualMono) => {
  * @param {boolean} endocde_in_jlse
  * @returns {string[]}
  */
-const qualityOptions = (endocde_in_jlse) => {
+const qualityOptions = (endocde_in_jlse: boolean) => {
   const audioBitrate = "60k";
-  const qp = 25;
-  const options = [
+  const qp = "25";
+  const options: string[] = [
     "-q",
     "-1",
     "-qp",
