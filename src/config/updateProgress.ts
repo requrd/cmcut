@@ -57,15 +57,17 @@ const updateToLogoFrame = (line: string, progress: Progress) => {
     const logoframe = raw_logoframe_data.match(
       /checking\s*(\d+)\/(\d+)\sended./
     );
-    progress.now_num = Number(logoframe[1]);
-    progress.total_num = Number(logoframe[2]);
-    progress.log_updated = true;
+    if (logoframe !== null) {
+      progress.now_num = Number(logoframe[1]);
+      progress.total_num = Number(logoframe[2]);
+      progress.log_updated = true;
+    }
   }
   progress.log = `(${progress.step}/${progress.steps}) logoframe: ${progress.now_num}/${progress.total_num}`;
   return progress;
 };
 
-const updateToChapter = (line, progress) => {
+const updateToChapter = (line: string, progress: Progress) => {
   const raw_chapter_exe_data = line.replace(/chapter_exe\s/, "");
   if (raw_chapter_exe_data.startsWith("\tVideo Frames")) {
     progress.total_num = Number(
