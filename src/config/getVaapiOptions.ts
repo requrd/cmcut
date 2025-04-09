@@ -9,7 +9,7 @@ const isDualMono = parseInt(getenv("AUDIOCOMPONENTTYPE"), 10) == 2;
  * @param {string?} input
  * @returns {string[]} FFmpegの引数となるパラメータ
  */
-const getVaapiOptions = (input: string | undefined) => {
+const getVaapiOptions = (input: string | undefined = undefined) => {
   const args: string[] = [];
   if (input) {
     args.push(...vaapiOptions);
