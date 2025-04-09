@@ -1,11 +1,13 @@
 import { execFile } from "child_process";
-const ffprobe = process.env.FFPROBE;
+import { getenv } from "./getenv.ts";
+
+const ffprobe = getenv("FFPROBE");
 /**
  * 動画長取得関数
  * @param {string} filePath ファイルパス
  * @return {Promise<int>} 動画長を返す (秒)
  */
-const getDuration = (filePath) => {
+const getDuration = (filePath: string) => {
   return new Promise((resolve, reject) => {
     execFile(
       ffprobe,
