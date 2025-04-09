@@ -1,12 +1,12 @@
 interface Progress {
-  total_num: Number;
-  now_num: Number;
+  total_num: number;
+  now_num: number;
   avisynth_flag: boolean;
-  percent: Number;
+  percent: number;
   log_updated: boolean;
   log: string;
-  duration: Number;
+  duration: number;
   steps: Number;
-  step: Number;
+  step: number;
 }
 export { Progress };
