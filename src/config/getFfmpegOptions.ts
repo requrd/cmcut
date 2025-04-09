@@ -7,8 +7,8 @@ const isDualMono = parseInt(process.env.AUDIOCOMPONENTTYPE, 10) == 2;
  * @param {string?} input
  * @returns {string[]} - FFmpegの引数となるパラメータ
  */
-const getFfmpegOptions = (input) => {
-  const args = [];
+const getFfmpegOptions = (input: string | undefined) => {
+  const args: string[] = [];
   if (input) {
     args.push("-y", "-i", input);
   }
@@ -34,7 +34,7 @@ const videoStreamOptions = () => {
  * @param {boolean} isDualMono
  * @returns { string[] }
  */
-const audioStreamOptions = (isDualMono) =>
+const audioStreamOptions = (isDualMono: boolean) =>
   isDualMono
     ? [
         "-filter_complex",
@@ -62,7 +62,7 @@ const audioStreamOptions = (isDualMono) =>
  */
 const qualityOptions = () => {
   const preset = "veryfast";
-  const crf = 23;
+  const crf = "23";
   return [
     "-stats",
     "-preset",

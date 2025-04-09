@@ -1,5 +1,5 @@
 import { spawn } from "child_process";
-import { getFfmpegOptions } from "./getFfmpegOptions.mjs";
+import { getFfmpegOptions } from "./getFfmpegOptions.ts";
 
 const ffmpeg = process.env.FFMPEG;
 const args = getFfmpegOptions(process.env.INPUT);
