@@ -3,6 +3,7 @@ import { basename, extname, dirname } from "path";
 import { getDuration } from "./getDuration.ts";
 import { updateProgress } from "./updateProgress.ts";
 import { getenv } from "./getenv.ts";
+import { Progress } from "./Progress.ts";
 
 /**
  * jlseの引数を生成する
@@ -52,17 +53,6 @@ const getJlseProcess = (
   return spawn("jlse", getJlseArgs(ffmpegOptions, hwOptions), { env: env });
 };
 
-interface Progress {
-  total_num: Number;
-  now_num: Number;
-  avisynth_flag: boolean;
-  percent: Number;
-  log_updated: boolean;
-  log: string;
-  duration: Number;
-  steps: Number;
-  step: Number;
-}
 //メインの処理 ここから
 
 /**
