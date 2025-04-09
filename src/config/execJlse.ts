@@ -1,7 +1,7 @@
 import { spawn } from "child_process";
 import { basename, extname, dirname } from "path";
-import { getDuration } from "./getDuration.mjs";
-import { updateProgress } from "./updateProgress.mjs";
+import { getDuration } from "./getDuration.ts";
+import { updateProgress } from "./updateProgress.ts";
 
 /**
  * jlseの引数を生成する
@@ -9,7 +9,14 @@ import { updateProgress } from "./updateProgress.mjs";
  * @param {string[]?} hwOptions
  * @returns {string[]}
  */
-const getJlseArgs = (ffmpegOptions, hwOptions) => {
+const getJlseArgs = (
+  ffmpegOptions: string[],
+  hwOptions: string[] | undefined
+) => {
+  const outfile = process.env.OUTPUT;
+  if (outfile === undefined) {
+    throw new Error(`Environment variable $OUTPUT is required`);
+  }
   const args = ["-i", process.env.INPUT, "-e"];
   if (hwOptions) {
     args.push(
@@ -22,9 +29,9 @@ const getJlseArgs = (ffmpegOptions, hwOptions) => {
     " " + ffmpegOptions.reduce((prev, curr) => prev + " " + curr),
     "-r",
     "-d",
-    dirname(process.env.OUTPUT),
+    dirname(outfile),
     "-n",
-    basename(process.env.OUTPUT, extname(process.env.OUTPUT)),
+    basename(outfile, extname(outfile)),
   ]);
 };
 
@@ -34,7 +41,10 @@ const getJlseArgs = (ffmpegOptions, hwOptions) => {
  * @param {string[]?} hwOptions - ハードウェアアクセラレータの設定
  * @returns JLSEのサブプロセス
  */
-const getJlseProcess = (ffmpegOptions, hwOptions) => {
+const getJlseProcess = (
+  ffmpegOptions: string[],
+  hwOptions: string[] | undefined
+) => {
   const env = Object.create(process.env);
   env.HOME = "/root";
   // console.error(`env: ${JSON.stringify(env)}`);
