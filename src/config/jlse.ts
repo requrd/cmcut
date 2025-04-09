@@ -1,4 +1,4 @@
-import { getFfmpegOptions } from "./getFfmpegOptions.mjs";
-import { execJlse } from "./execJlse.mjs";
+import { getFfmpegOptions } from "./getFfmpegOptions.ts";
+import { execJlse } from "./execJlse.ts";
 
 execJlse(getFfmpegOptions());

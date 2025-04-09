@@ -64,7 +64,7 @@ const getJlseProcess = (
  */
 const execJlse = async (
   ffmpegOptions: string[],
-  hwOptions: string[] | undefined
+  hwOptions: string[] | undefined = undefined
 ) => {
   //進捗管理用オブジェクト
   let progress = {
@@ -75,7 +75,7 @@ const execJlse = async (
     log_updated: false,
     log: "",
     // 進捗計算のために動画の長さを取得
-    duration: await getDuration(process.env.INPUT),
+    duration: await getDuration(getenv("INPUT")),
     steps: 4,
     step: 0,
   };
