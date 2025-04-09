@@ -1,16 +1,17 @@
 // ref. https://github.com/plife18/docker-epgstation/blob/main/epgstation/config/enc_vaapi.js
 import { spawn } from "child_process";
 import { stat } from "node:fs/promises";
-import { getDuration } from "./getDuration.mjs";
-import { getVaapiOptions } from "./getVaapiOptions.mjs";
+import { getDuration } from "./getDuration.ts";
+import { getVaapiOptions } from "./getVaapiOptions.ts";
+import { getenv } from "./getenv.ts";
 
-const ffmpeg = process.env.FFMPEG;
-const args = getVaapiOptions(process.env.INPUT);
-args.push(process.env.OUTPUT);
+const ffmpeg = getenv("FFMPEG");
+const args = getVaapiOptions(getenv("INPUT"));
+args.push(getenv("OUTPUT"));
 
 (async () => {
   // 進捗計算のために動画の長さを取得
-  const duration = await getDuration(process.env.INPUT);
+  const duration = await getDuration(getenv("INPUT"));
 
   const child = spawn(ffmpeg, args);
   // debug for ffmpeg
