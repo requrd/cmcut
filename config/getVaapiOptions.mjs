@@ -44,8 +44,7 @@ const vaapiOptions = [
 const videoStreamOptions = (endocde_in_jlse) => {
   const codec = "h264_vaapi";
   const videoFilter =
-    (endocde_in_jlse ? "format=nv12,hwupload," : "") +
-    "deinterlace_vaapi,scale_vaapi=h=720:w=-2";
+    (endocde_in_jlse ? "format=nv12,hwupload," : "") + "deinterlace_vaapi";
   return ["-map", "0:v", "-c:v", codec, "-vf", videoFilter];
 };
 
