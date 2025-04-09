@@ -1,15 +1,7 @@
 {
-  "build": {
-    "dockerfile": "./Dockerfile.dev"
-  },
-  "postCreateCommand": "bash",
-  "remoteUser": "vscode",
-  "containerEnv": {
-    "NODE_PATH": "/app/node_modules"
-  },
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:1.1.10-18-bookworm",
   "mounts": [
-    "source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,type=bind,consistency=cached",
-    "source=${localWorkspaceFolder}/config,target=/app/config,type=bind,consistency=cached"
+    "source=${localEnv:HOME}/.ssh,target=/home/node/.ssh,type=bind,consistency=cached"
   ],
   "customizations": {
     "vscode": {
@@ -17,12 +9,16 @@
         "editor.defaultFormatter": "esbenp.prettier-vscode",
         "[javascript]": {
           "editor.defaultFormatter": "esbenp.prettier-vscode"
-        },
-        "eslit": {
-          "nodePath": "/app/node_modules"
         }
+        // "eslit": {
+        //   "nodePath": "/app/node_modules"
+        // }
       },
-      "extensions": ["dbaeumer.vscode-eslint", "esbenp.prettier-vscode"]
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "crystal-spider.jsdoc-generator"
+      ]
     }
   }
 }

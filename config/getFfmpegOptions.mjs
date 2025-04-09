@@ -3,54 +3,76 @@ const isDualMono = parseInt(process.env.AUDIOCOMPONENTTYPE, 10) == 2;
 
 /**
  * FFmpegのオプションを作成する
- * @returns string[] - FFmpegの引数となるパラメータ
+ *
+ * @param {string?} input
+ * @returns {string[]} - FFmpegの引数となるパラメータ
  */
-const getFfmpegOptions = () => {
-  const args = ["-y"];
-  const preset = "veryfast";
-  const codec = "libx264"; //libx264でエンコード
-  const crf = 23;
-  const videoFilter = "yadif";
-
-  if (isDualMono) {
-    Array.prototype.push.apply(args, [
-      "-filter_complex",
-      "channelsplit[FL][FR]",
-      "-map",
-      "0:v",
-      "-map",
-      "[FL]",
-      "-map",
-      "[FR]",
-      "-metadata:s:a:0",
-      "language=jpn",
-      "-metadata:s:a:1",
-      "language=eng",
-    ]);
-    Array.prototype.push.apply(args, ["-c:a ac3", "-ar 48000", "-ab 256k"]);
-  } else {
-    // audio dataをコピー
-    Array.prototype.push.apply(args, ["-c:a", "aac"]);
+const getFfmpegOptions = (input) => {
+  const args = [];
+  if (input) {
+    args.push("-y", "-i", input);
   }
+  args.push(...videoStreamOptions());
+  args.push(...audioStreamOptions(isDualMono));
+  args.push("-ignore_unknown");
+  return args.concat(...qualityOptions());
+};
 
-  Array.prototype.push.apply(args, ["-ignore_unknown"]);
+/**
+ * ビデオストリームオプション
+ *
+ * @returns {string[]}
+ */
+const videoStreamOptions = () => {
+  const codec = "libx264"; //libx264でエンコード
+  const videoFilter = "yadif";
+  return ["-c:v", codec, "-vf", videoFilter];
+};
+/**
+ * オーディオストリームオプション
+ *
+ * @param {boolean} isDualMono
+ * @returns { string[] }
+ */
+const audioStreamOptions = (isDualMono) =>
+  isDualMono
+    ? [
+        "-filter_complex",
+        "channelsplit[FL][FR]",
+        "-map",
+        "0:v",
+        "-map",
+        "[FL]",
+        "-map",
+        "[FR]",
+        "-metadata:s:a:0",
+        "language=jpn",
+        "-metadata:s:a:1",
+        "language=eng",
+        "-c:a ac3",
+        "-ar 48000",
+        "-ab 256k",
+      ]
+    : ["-c:a", "aac"];
 
-  // その他設定
-  Array.prototype.push.apply(args, [
+/**
+ * 品質オプション
+ *
+ * @returns {string[]}
+ */
+const qualityOptions = () => {
+  const preset = "veryfast";
+  const crf = 23;
+  return [
     "-stats",
-    "-vf",
-    videoFilter,
     "-preset",
     preset,
     "-aspect",
     "16:9",
-    "-c:v",
-    codec,
     "-crf",
     crf,
     "-f",
     "mp4",
-  ]);
-  return args;
+  ];
 };
 export { getFfmpegOptions };

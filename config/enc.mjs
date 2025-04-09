@@ -2,7 +2,7 @@ import { spawn } from "child_process";
 import { getFfmpegOptions } from "./getFfmpegOptions.mjs";
 
 const ffmpeg = process.env.FFMPEG;
-const args = ["-y", "-i", process.env.INPUT].concat(getFfmpegOptions());
+const args = getFfmpegOptions(process.env.INPUT);
 args.push(process.env.OUTPUT);
 
 // ここから処理開始

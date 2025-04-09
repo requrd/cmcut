@@ -12,7 +12,7 @@ const handle_error = (error) => {
  * エンドポイントからデータを取得する
  * @param {string} url
  * @param {Object} query
- * @returns Object
+ * @returns {Object}
  */
 const fetch_data = async (url, query) => {
   try {

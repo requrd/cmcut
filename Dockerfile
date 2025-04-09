@@ -1,4 +1,4 @@
-FROM ghcr.io/tobitti0/docker-avisynthplus:5.1-ubuntu2004 as build
+FROM requrd/ffmpeg-l-smash-works:vaapi-6.1.2 AS build
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV NODE_VERSION=18
@@ -7,11 +7,12 @@ ENV EPGSTATION_VERSION=v2.9.1
 RUN set -xe && \
     apt-get update && \
     apt-get install --no-install-recommends -y \
-    curl git make gcc g++ cmake libboost-all-dev
+    curl git make gcc g++ cmake libboost-all-dev ca-certificates
 
 # build jlse libs
 ADD lib /tmp/lib
-RUN mkdir /dist && \
+RUN set -xe && \
+    mkdir /dist && \
     cd /tmp/lib/chapter_exe/src && \
     make && \
     mv chapter_exe /dist && \
@@ -43,7 +44,7 @@ RUN set -xe && \
     cd /tmp && \
     git clone https://github.com/l3tnun/EPGStation.git -b ${EPGSTATION_VERSION}
 
-FROM ghcr.io/tobitti0/docker-avisynthplus:5.1-ubuntu2004 as release
+FROM requrd/ffmpeg-l-smash-works:vaapi-6.1.2 AS release
 ENV DEBIAN_FRONTEND=noninteractive
 ADD join_logo_scp_trial /join_logo_scp_trial
 COPY --from=build /dist/chapter_exe /join_logo_scp_trial/bin/chapter_exe
@@ -55,8 +56,7 @@ COPY --from=build /dist/libdelogo.so /usr/local/lib/avisynth/libdelogo.so
 COPY --from=build /tmp/EPGStation /app
 
 WORKDIR /join_logo_scp_trial
-RUN apt update && apt install -y ca-certificates && \    
-    bash setup_node.x && \
+RUN bash setup_node.x && \
     apt install --no-install-recommends -y nodejs libboost-filesystem-dev libboost-program-options-dev libboost-system-dev && \
     node -v && \
     npm --version && \
