@@ -1,10 +1,12 @@
+import { Progress } from "./Progress.ts";
+
 /**
  * 取得したログから状態を更新する
  * @param {string} line -  e.g." frame= 2847 fps=0.0 q=-1.0 Lsize=  216432kB time=00:01:35.64 bitrate=18537.1kbits/s speed= 222x"
  * @param {Object} progress
  * @returns progress - 更新済みのprogress
  */
-const updateToFfmpeg = (line, progress) => {
+const updateToFfmpeg = (line: string, progress: Progress) => {
   const encoding = {};
   const fields = (line + " ").match(/[A-z]*=[A-z,0-9,\s,.,\/,:,-]* /g);
   if (fields === null) {
@@ -49,7 +51,7 @@ const updateToAviSynth = (line, progress) => {
   return progress;
 };
 
-const updateToLogoFrame = (line, progress) => {
+const updateToLogoFrame = (line: string, progress: Progress) => {
   const raw_logoframe_data = line.replace(/logoframe\s/, "");
   if (raw_logoframe_data.startsWith("checking") && raw_logoframe_data) {
     const logoframe = raw_logoframe_data.match(
@@ -85,7 +87,7 @@ const updateToChapter = (line, progress) => {
   return progress;
 };
 
-const applyUpdate = (line, progress) => {
+const applyUpdate = (line: string, progress: Progress) => {
   const steps = new Map([
     ["AviSynth", updateToAviSynth],
     ["chapter_exe", updateToChapter],
@@ -116,7 +118,7 @@ const applyUpdate = (line, progress) => {
  * @param {Object} progress - 直前までの進捗
  * @returns Object - 更新済みの進捗
  */
-const updateProgress = (line, progress) => {
+const updateProgress = (line: string, progress: Progress) => {
   progress = applyUpdate(line, progress);
   progress.percent = progress.now_num / progress.total_num;
   if (progress.log_updated) {
