@@ -1,5 +1,5 @@
 // const videoHeight = parseInt(process.env.VIDEORESOLUTION, 10);
-const isDualMono = parseInt(process.env.AUDIOCOMPONENTTYPE, 10) == 2;
+const isDualMono = parseInt(process.env.AUDIOCOMPONENTTYPE ?? "0", 10) == 2;
 
 /**
  * FFmpegのオプションを作成する
