@@ -1,4 +1,4 @@
-import { getenv } from "./getenv.ts";
+import { getenv } from "./getenv";
 // const videoHeight = parseInt(process.env.VIDEORESOLUTION, 10);
 const isDualMono = parseInt(getenv("AUDIOCOMPONENTTYPE"), 10) == 2;
 

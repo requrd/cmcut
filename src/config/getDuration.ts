@@ -1,5 +1,5 @@
 import { execFile } from "child_process";
-import { getenv } from "./getenv.ts";
+import { getenv } from "./getenv";
 
 const ffprobe = getenv("FFPROBE");
 /**

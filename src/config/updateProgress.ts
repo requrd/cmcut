@@ -1,4 +1,4 @@
-import { Progress } from "./Progress.ts";
+import { Progress } from "./Progress";
 
 /**
  * 取得したログから状態を更新する

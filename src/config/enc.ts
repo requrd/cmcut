@@ -1,6 +1,6 @@
 import { spawn } from "child_process";
-import { getFfmpegOptions } from "./getFfmpegOptions.ts";
-import { getenv } from "./getenv.ts";
+import { getFfmpegOptions } from "./getFfmpegOptions";
+import { getenv } from "./getenv";
 
 const ffmpeg = getenv("FFMPEG");
 const args = getFfmpegOptions(getenv("INPUT"));

@@ -1,4 +1,4 @@
-import { vaapiOptions, getVaapiOptions } from "./getVaapiOptions.ts";
-import { execJlse } from "./execJlse.ts";
+import { vaapiOptions, getVaapiOptions } from "./getVaapiOptions";
+import { execJlse } from "./execJlse";
 
 execJlse(getVaapiOptions(), vaapiOptions);

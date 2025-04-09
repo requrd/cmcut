@@ -1,9 +1,9 @@
 import { spawn } from "child_process";
 import { basename, extname, dirname } from "path";
-import { getDuration } from "./getDuration.ts";
-import { updateProgress } from "./updateProgress.ts";
-import { getenv } from "./getenv.ts";
-import { Progress } from "./Progress.ts";
+import { getDuration } from "./getDuration";
+import { updateProgress } from "./updateProgress";
+import { getenv } from "./getenv";
+import { Progress } from "./Progress";
 
 /**
  * jlseの引数を生成する
