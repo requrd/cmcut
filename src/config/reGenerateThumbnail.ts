@@ -14,7 +14,7 @@ const handle_error = (error) => {
  * @param {Object} query
  * @returns {Object}
  */
-const fetch_data = async (url, query) => {
+const fetch_data = async (url: string, query: Object) => {
   try {
     const response = await axios.get(url, {
       headers: { accept: "application/json" },
@@ -30,7 +30,10 @@ const fetch_data = async (url, query) => {
  * @param {string} record_id
  * @param {string?} video_file_id
  */
-const reGenerateThumbnail = async (record_id, video_file_id) => {
+const reGenerateThumbnail = async (
+  record_id: string,
+  video_file_id: string | undefined
+) => {
   try {
     const record = await fetch_data(`/api/recorded/${record_id}`, {
       isHalfWidth: true,
