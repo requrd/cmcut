@@ -2,6 +2,7 @@ import { spawn } from "child_process";
 import { basename, extname, dirname } from "path";
 import { getDuration } from "./getDuration.ts";
 import { updateProgress } from "./updateProgress.ts";
+import { getenv } from "./getenv.ts";
 
 /**
  * jlseの引数を生成する
@@ -17,7 +18,7 @@ const getJlseArgs = (
   if (outfile === undefined) {
     throw new Error(`Environment variable $OUTPUT is required`);
   }
-  const args = ["-i", process.env.INPUT, "-e"];
+  const args: string[] = ["-i", getenv("INPUT"), "-e"];
   if (hwOptions) {
     args.push(
       "-g",
@@ -61,7 +62,10 @@ const getJlseProcess = (
  * @param {string[]?} hwOptions
  * @returns {*}
  */
-const execJlse = async (ffmpegOptions, hwOptions) => {
+const execJlse = async (
+  ffmpegOptions: string[],
+  hwOptions: string[] | undefined
+) => {
   //進捗管理用オブジェクト
   let progress = {
     total_num: 0,
@@ -90,7 +94,7 @@ const execJlse = async (ffmpegOptions, hwOptions) => {
 
   child.on("error", (err) => {
     console.error(err);
-    throw new Error(err);
+    throw err;
   });
 
   process.on("SIGINT", () => {
