@@ -52,6 +52,17 @@ const getJlseProcess = (
   return spawn("jlse", getJlseArgs(ffmpegOptions, hwOptions), { env: env });
 };
 
+interface Progress {
+  total_num: Number;
+  now_num: Number;
+  avisynth_flag: boolean;
+  percent: Number;
+  log_updated: boolean;
+  log: string;
+  duration: Number;
+  steps: Number;
+  step: Number;
+}
 //メインの処理 ここから
 
 /**
@@ -67,7 +78,7 @@ const execJlse = async (
   hwOptions: string[] | undefined = undefined
 ) => {
   //進捗管理用オブジェクト
-  let progress = {
+  let progress: Progress = {
     total_num: 0,
     now_num: 0,
     avisynth_flag: false,
