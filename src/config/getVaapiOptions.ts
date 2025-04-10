@@ -1,6 +1,9 @@
 import { getenv } from "./getenv";
 import { FfmpegOptionsPlugin, getFfmpegOptions } from "./ffmpegOptionsPlugin";
 // const videoHeight = parseInt(process.env.VIDEORESOLUTION, 10);
+// ユーザー設定
+const audioBitrate = "60k";
+const qp = "25";
 
 const vaapiOptions = [
   "-vaapi_device",
@@ -41,41 +44,34 @@ const vaapiPlugin: FfmpegOptionsPlugin = {
         ]
       : ["-map", "0:a", "-map", "-0:13?", "-map", "-0:10?"];
   },
-  qualityOptions: (encodeInJlse) => {
-    const audioBitrate = "60k";
-    const qp = "25";
-    const options: string[] = [
-      "-q",
-      "-1",
-      "-qp",
-      qp,
-      "-g",
-      "300",
-      "-bf",
-      "8",
-      "-i_qfactor",
-      "0.7143",
-      "-b_qfactor",
-      "1.3",
-      "-qmin",
-      "20",
-      "-qmax",
-      "51",
-      "-compression_level",
-      "0",
-      "-f",
-      "mp4",
-      "-ar",
-      "48000",
-      "-ab",
-      audioBitrate,
-      "-ac",
-      "2",
-    ];
-    return encodeInJlse
-      ? ["-stats", "-aspect", "16:9"].concat(options)
-      : options;
-  },
+  qualityOptions: [
+    "-q",
+    "-1",
+    "-qp",
+    qp,
+    "-g",
+    "300",
+    "-bf",
+    "8",
+    "-i_qfactor",
+    "0.7143",
+    "-b_qfactor",
+    "1.3",
+    "-qmin",
+    "20",
+    "-qmax",
+    "51",
+    "-compression_level",
+    "0",
+    "-f",
+    "mp4",
+    "-ar",
+    "48000",
+    "-ab",
+    audioBitrate,
+    "-ac",
+    "2",
+  ],
 };
 
 /**
