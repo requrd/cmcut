@@ -46,16 +46,4 @@ const softwarePlugin: FfmpegOptionsPlugin = {
     "mp4",
   ],
 };
-
-/**
- * FFmpegのオプションを作成する
- *
- * @param {string?} input
- * @returns {string[]} - FFmpegの引数となるパラメータ
- */
-const getSoftwareOptions = (input: string | undefined = undefined) => {
-  const isDualMono = parseInt(getenv("AUDIOCOMPONENTTYPE"), 10) == 2;
-  return getOptions(input, isDualMono, softwarePlugin);
-};
-
-export { getSoftwareOptions };
+export { softwarePlugin };

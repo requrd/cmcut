@@ -1,4 +1,6 @@
 import { execJlse } from "./execJlse";
-import { getFfmpegOptions } from "./getFfmpegOptions";
+import { getFfmpegOptions } from "./ffmpegOptionsPlugin";
+import { getenv } from "./getenv";
+import { softwarePlugin } from "./softwareOptions";
 
-execJlse(getFfmpegOptions());
+execJlse(getFfmpegOptions(undefined, parseInt(getenv("AUDIOCOMPONENTTYPE"), 10) == 2, softwarePlugin));
