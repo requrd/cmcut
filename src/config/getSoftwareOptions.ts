@@ -5,7 +5,7 @@ import { getenv } from "./getenv";
 const preset = "veryfast";
 const crf = "23";
 
-const ffmpegPlugin: FfmpegOptionsPlugin = {
+const softwarePlugin: FfmpegOptionsPlugin = {
   hardwareOptions: undefined,
   videoStreamOptions: () => {
     const codec = "libx264";
@@ -55,7 +55,7 @@ const ffmpegPlugin: FfmpegOptionsPlugin = {
  */
 const getSoftwareOptions = (input: string | undefined = undefined) => {
   const isDualMono = parseInt(getenv("AUDIOCOMPONENTTYPE"), 10) == 2;
-  return getOptions(input, isDualMono, ffmpegPlugin);
+  return getOptions(input, isDualMono, softwarePlugin);
 };
 
 export { getSoftwareOptions };
