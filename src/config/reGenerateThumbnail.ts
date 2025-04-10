@@ -60,4 +60,6 @@ const main = async () => {
   await reGenerateThumbnail(record_id, video_file_id);
 };
 
-await main();
+(async () => {
+  await main();
+})();
