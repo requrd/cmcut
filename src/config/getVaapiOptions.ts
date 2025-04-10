@@ -45,6 +45,7 @@ const vaapiPlugin: FfmpegOptionsPlugin = {
       : ["-map", "0:a", "-map", "-0:13?", "-map", "-0:10?"];
   },
   qualityOptions: [
+    "-map", "0:s?", "-c:s", "mov_text",
     "-q",
     "-1",
     "-qp",
