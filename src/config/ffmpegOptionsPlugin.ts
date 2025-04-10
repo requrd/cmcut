@@ -6,15 +6,11 @@ interface AudioStreamOptionsFunction {
   (isDualMono: boolean): string[];
 }
 
-interface QualityOptionsFunction {
-  (encodeInJlse?: boolean): string[];
-}
-
 interface FfmpegOptionsPlugin {
   hardwareOptions: string[] | undefined;
   videoStreamOptions: VideoStreamOptionsFunction;
   audioStreamOptions: AudioStreamOptionsFunction;
-  qualityOptions: QualityOptionsFunction;
+  qualityOptions: string[];
 }
 
 const getFfmpegOptions = (
@@ -31,8 +27,11 @@ const getFfmpegOptions = (
   }
   args.push(...plugin.videoStreamOptions(input === undefined));
   args.push(...plugin.audioStreamOptions(isDualMono));
-  args.push("-ignore_unknown");
-  return args.concat(...plugin.qualityOptions(input === undefined));
+  args.push(...plugin.qualityOptions);
+  if (input === undefined) {
+    args.push("-stats", "-aspect", "16:9");
+  }
+  return args;
 };
 
 export { FfmpegOptionsPlugin, getFfmpegOptions };

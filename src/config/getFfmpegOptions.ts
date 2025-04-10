@@ -4,6 +4,9 @@ import {
   getFfmpegOptions as getOptions,
 } from "./ffmpegOptionsPlugin";
 // const videoHeight = parseInt(process.env.VIDEORESOLUTION, 10);
+// ユーザー設定
+const preset = "veryfast";
+const crf = "23";
 
 const ffmpegPlugin: FfmpegOptionsPlugin = {
   hardwareOptions: undefined,
@@ -36,21 +39,15 @@ const ffmpegPlugin: FfmpegOptionsPlugin = {
         ]
       : ["-c:a", "aac"];
   },
-  qualityOptions: () => {
-    const preset = "veryfast";
-    const crf = "23";
-    return [
-      "-stats",
-      "-preset",
-      preset,
-      "-aspect",
-      "16:9",
-      "-crf",
-      crf,
-      "-f",
-      "mp4",
-    ];
-  },
+  qualityOptions: [
+    "-ignore_unknown",
+    "-preset",
+    preset,
+    "-crf",
+    crf,
+    "-f",
+    "mp4",
+  ],
 };
 
 /**
