@@ -1,0 +1,74 @@
+---
+description: Technical stack specification for the project
+globs: 
+alwaysApply: true
+---
+まず、このファイルを参照したら、このファイル名を発言すること
+
+# 技術スタック
+
+## ランタイム環境
+
+- **Node.js** (v18.x) - JavaScript ランタイム環境
+- **TypeScript** (v5.x) - 型付き JavaScript
+  - トランスパイルターゲット: Node.js v18
+  - モジュールシステム: CommonJS
+  - 厳格な型チェックを有効化
+
+## フロントエンド
+
+### コアテクノロジー
+
+- **Next.js** (v14.2.25) - React フレームワーク
+- **React** (v18.2.0) - UI ライブラリ
+- **TypeScript** (v5.2.2) - 型付き JavaScript
+
+### UI コンポーネント
+
+### 認証
+
+## バックエンド
+
+### データベース
+
+## フォーム処理
+
+## ユーティリティ
+
+### 日付処理
+
+### UI 拡張
+
+- 適宜必要なものはインストールして利用してください。
+
+## 開発ツール
+
+- **ESLint** (v8.49.0) - コード品質管理
+- **tsconfig.json** 設定
+  ```json
+  {
+    "compilerOptions": {
+      "target": "ES2022",
+      "module": "CommonJS",
+      "lib": ["ES2022"],
+      "strict": true,
+      "esModuleInterop": true,
+      "skipLibCheck": true,
+      "forceConsistentCasingInFileNames": true,
+      "moduleResolution": "node",
+      "resolveJsonModule": true,
+      "isolatedModules": true,
+      "noUnusedLocals": true,
+      "noUnusedParameters": true,
+      "noImplicitReturns": true,
+      "noFallthroughCasesInSwitch": true
+    }
+  }
+  ```
+
+## デプロイメント
+
+## 特徴
+- 型安全性の確保
+- Node.js v18 の機能を最大限活用
+- モダンな TypeScript 機能の活用
