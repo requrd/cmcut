@@ -103,11 +103,11 @@ function parse(line: string, duration: number) {
   );
 }
 
-(async () => {
+async function encode(command: string, args: string[]) {
   // 進捗計算のために動画の長さを取得
   const duration = await getDuration(getenv("INPUT"));
 
-  const child = spawn(ffmpeg, args);
+  const child = spawn(command, args);
   // debug for ffmpeg
   // const child = spawn(ffmpeg, args, { stdio: "inherit" });
 
@@ -143,4 +143,7 @@ function parse(line: string, duration: number) {
       throw new Error("1");
     }
   });
+}
+(async () => {
+  await encode(ffmpeg, args);
 })();
