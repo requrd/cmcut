@@ -23,7 +23,7 @@ const vaapiPlugin: FfmpegOptionsPlugin = {
     return ["-c:v", codec, "-vf", videoFilter];
   },
   audioStreamOptions: (isDualMono) => {
-    return isDualMono
+    const options = isDualMono
       ? [
         "-filter_complex",
         "channelsplit[FL][FR]",
@@ -35,13 +35,11 @@ const vaapiPlugin: FfmpegOptionsPlugin = {
         "language=jpn",
         "-metadata:s:a:1",
         "language=eng",
-        "-c:a",
-        "libopus",
-        "-strict",
-        "-2",
       ]
       : ["-map", "0:a", "-map", "-0:13?", "-map", "-0:10?"];
+    return options.concat(["-c:a", "libopus", "-strict", "-2"]);
   },
+
   qualityOptions: [
     "-map",
     "0:s?",
