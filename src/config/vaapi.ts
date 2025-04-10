@@ -28,7 +28,7 @@ args.push(getenv("OUTPUT"));
       let str = strbyline[i];
       if (str.startsWith("frame")) {
         // 想定log
-        // frame= 5159 fps= 11 q=29.0 size=  122624kB time=00:02:51.84 bitrate=5845.8kb/s dup=19 drop=0 speed=0.372x
+        // frame= 5159 fps= 11 q=29.0 size=  122624kB time=00:02:51.84 bitrate=5845.8kbits/s dup=19 drop=0 speed=0.372x
         const progress: {
           frame?: number;
           fps?: number;
@@ -41,12 +41,12 @@ args.push(getenv("OUTPUT"));
           speed?: number;
         } = {};
         const ffmpeg_reg =
-          /frame=\s*(?<frame>\d+)\sfps=\s*(?<fps>\d+(?:\.\d+)?)\sq=\s*(?<q>[+-]?\d+(?:\.\d+)?)\sL?size=\s*(?<size>\d+(?:\.\d+)?)kB\stime=\s*(?<time>\d+[:\.\d+]*)\sbitrate=\s*(?<bitrate>\d+(?:\.\d+)?)kb\/s(?:\sdup=\s*(?<dup>\d+))?(?:\sdrop=\s*(?<drop>\d+))?\sspeed=\s*(?<speed>\d+(?:\.\d+)?)x/;
+          /frame=\s*(?<frame>\d+)\sfps=\s*(?<fps>\d+(?:\.\d+)?)\sq=\s*(?<q>[+-]?\d+(?:\.\d+)?)\sL?size=\s*(?<size>\d+(?:\.\d+)?)kB\stime=\s*(?<time>\d+[:\.\d+]*)\sbitrate=\s*(?<bitrate>\d+(?:\.\d+)?)kbits\/s(?:\sdup=\s*(?<dup>\d+))?(?:\sdrop=\s*(?<drop>\d+))?\sspeed=\s*(?<speed>\d+(?:\.\d+)?)x/;
         let ffmatch = str.match(ffmpeg_reg);
         /**
          * match結果
          * [
-         *   'frame= 5159 fps= 11 q=29.0 size=  122624kB time=00:02:51.84 bitrate=5845.8kb/s dup=19 drop=0 speed=0.372x',
+         *   'frame= 5159 fps= 11 q=29.0 size=  122624kB time=00:02:51.84 bitrate=5845.8kbits/s dup=19 drop=0 speed=0.372x',
          *   '5159',
          *   '11',
          *   '29.0',
@@ -57,7 +57,7 @@ args.push(getenv("OUTPUT"));
          *   '0',
          *   '0.372',
          *   index: 0,
-         *   input: 'frame= 5159 fps= 11 q=29.0 size=  122624kB time=00:02:51.84 bitrate=5845.8kb/s dup=19 drop=0 speed=0.372x    \r',
+         *   input: 'frame= 5159 fps= 11 q=29.0 size=  122624kB time=00:02:51.84 bitrate=5845.8kbits/s dup=19 drop=0 speed=0.372x    \r',
          *   groups: [Object: null prototype] {
          *     frame: '5159',
          *     fps: '11',
