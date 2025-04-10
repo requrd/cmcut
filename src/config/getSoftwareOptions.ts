@@ -53,9 +53,9 @@ const ffmpegPlugin: FfmpegOptionsPlugin = {
  * @param {string?} input
  * @returns {string[]} - FFmpegの引数となるパラメータ
  */
-const getFfmpegOptions = (input: string | undefined = undefined) => {
+const getSoftwareOptions = (input: string | undefined = undefined) => {
   const isDualMono = parseInt(getenv("AUDIOCOMPONENTTYPE"), 10) == 2;
   return getOptions(input, isDualMono, ffmpegPlugin);
 };
 
-export { getFfmpegOptions };
+export { getSoftwareOptions };
