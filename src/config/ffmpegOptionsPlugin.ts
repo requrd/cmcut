@@ -11,6 +11,7 @@ interface QualityOptionsFunction {
 }
 
 interface FfmpegOptionsPlugin {
+  hardwareOptions: string[] | undefined;
   videoStreamOptions: VideoStreamOptionsFunction;
   audioStreamOptions: AudioStreamOptionsFunction;
   qualityOptions: QualityOptionsFunction;
@@ -23,12 +24,15 @@ const getFfmpegOptions = (
 ): string[] => {
   const args: string[] = [];
   if (input) {
+    if (plugin.hardwareOptions) {
+      args.push(...plugin.hardwareOptions);
+    }
     args.push("-y", "-i", input);
   }
-  args.push(...plugin.videoStreamOptions(input !== undefined));
+  args.push(...plugin.videoStreamOptions(input === undefined));
   args.push(...plugin.audioStreamOptions(isDualMono));
   args.push("-ignore_unknown");
-  return args.concat(...plugin.qualityOptions(input !== undefined));
+  return args.concat(...plugin.qualityOptions(input === undefined));
 };
 
 export { FfmpegOptionsPlugin, getFfmpegOptions };
