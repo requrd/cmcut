@@ -34,9 +34,8 @@ const updateToFfmpeg = (line: string, progress: Progress) => {
     progress.now_num = encoding.time
       .split(":")
       .reduce(
-        (prev: number, curr: string, i: number) =>
-          prev + parseFloat(curr) * 60 ** (2 - i),
-        0
+        (prev: number, curr: string, i: number) => prev + parseFloat(curr) * 60 ** (2 - i),
+        0,
       );
   } else {
     progress.now_num = 0;
@@ -51,7 +50,7 @@ const updateToAviSynth = (line: string, progress: Progress) => {
   const encoding: { [key: string]: any } = {};
   const raw_avisynth_data = line.replace(/AviSynth\s/, "");
   const creatingMatch = raw_avisynth_data.match(
-    /Creating\slwi\sindex\sfile\s(\d+)%/
+    /Creating\slwi\sindex\sfile\s(\d+)%/,
   );
   if (creatingMatch) {
     progress.total_num = 200;
@@ -72,7 +71,7 @@ const updateToLogoFrame = (line: string, progress: Progress) => {
   const raw_logoframe_data = line.replace(/logoframe\s/, "");
   if (raw_logoframe_data.startsWith("checking") && raw_logoframe_data) {
     const logoframe = raw_logoframe_data.match(
-      /checking\s*(\d+)\/(\d+)\sended./
+      /checking\s*(\d+)\/(\d+)\sended./,
     );
     if (logoframe !== null) {
       progress.now_num = Number(logoframe[1]);
@@ -87,7 +86,7 @@ const updateToLogoFrame = (line: string, progress: Progress) => {
 const updateToChapter = (line: string, progress: Progress) => {
   const raw_chapter_exe_data = line.replace(/chapter_exe\s/, "");
   const videoFramesMatch = raw_chapter_exe_data.match(
-    /\tVideo\sFrames:\s(\d+)\s\[\d+\.\d+fps\]/
+    /\tVideo\sFrames:\s(\d+)\s\[\d+\.\d+fps\]/,
   );
   if (videoFramesMatch) {
     progress.total_num = Number(videoFramesMatch[1]);
@@ -95,7 +94,7 @@ const updateToChapter = (line: string, progress: Progress) => {
   }
 
   const muteMatch = raw_chapter_exe_data.match(
-    /mute\s?\d+:\s(\d+)\s\-\s\d+フレーム/
+    /mute\s?\d+:\s(\d+)\s\-\s\d+フレーム/,
   );
   if (muteMatch) {
     progress.now_num = Number(muteMatch[1]);
@@ -131,7 +130,7 @@ const applyUpdate = (line: string, progress: Progress) => {
       }
     }
   }
-  //進捗表示に必要ない出力データを流す
+  // 進捗表示に必要ない出力データを流す
   console.log(line);
   return progress;
 };
@@ -151,7 +150,7 @@ const updateProgress = (line: string, progress: Progress) => {
         type: "progress",
         percent: progress.percent,
         log: progress.log,
-      })
+      }),
     );
     progress.log_updated = false;
   }

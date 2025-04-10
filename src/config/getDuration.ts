@@ -25,7 +25,7 @@ const getDuration = (filePath: string) => {
         } catch (err) {
           reject(err);
         }
-      }
+      },
     );
   });
 };

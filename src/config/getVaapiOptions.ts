@@ -1,5 +1,5 @@
-import { getenv } from "./getenv";
 import { FfmpegOptionsPlugin, getFfmpegOptions } from "./ffmpegOptionsPlugin";
+import { getenv } from "./getenv";
 // const videoHeight = parseInt(process.env.VIDEORESOLUTION, 10);
 // ユーザー設定
 const audioBitrate = "60k";
@@ -27,25 +27,28 @@ const vaapiPlugin: FfmpegOptionsPlugin = {
   audioStreamOptions: (isDualMono) => {
     return isDualMono
       ? [
-          "-filter_complex",
-          "channelsplit[FL][FR]",
-          "-map",
-          "[FL]",
-          "-map",
-          "[FR]",
-          "-metadata:s:a:0",
-          "language=jpn",
-          "-metadata:s:a:1",
-          "language=eng",
-          "-c:a",
-          "libopus",
-          "-strict",
-          "-2",
-        ]
+        "-filter_complex",
+        "channelsplit[FL][FR]",
+        "-map",
+        "[FL]",
+        "-map",
+        "[FR]",
+        "-metadata:s:a:0",
+        "language=jpn",
+        "-metadata:s:a:1",
+        "language=eng",
+        "-c:a",
+        "libopus",
+        "-strict",
+        "-2",
+      ]
       : ["-map", "0:a", "-map", "-0:13?", "-map", "-0:10?"];
   },
   qualityOptions: [
-    "-map", "0:s?", "-c:s", "mov_text",
+    "-map",
+    "0:s?",
+    "-c:s",
+    "mov_text",
     "-q",
     "-1",
     "-qp",
@@ -87,4 +90,4 @@ const getVaapiOptions = (input: string | undefined = undefined) => {
   return getFfmpegOptions(input, isDualMono, vaapiPlugin);
 };
 
-export { vaapiOptions, getVaapiOptions };
+export { getVaapiOptions, vaapiOptions };

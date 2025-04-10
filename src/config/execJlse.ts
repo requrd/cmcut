@@ -1,9 +1,9 @@
 import { spawn } from "child_process";
-import { basename, extname, dirname } from "path";
+import { basename, dirname, extname } from "path";
 import { getDuration } from "./getDuration";
-import { updateProgress } from "./updateProgress";
 import { getenv } from "./getenv";
 import { Progress } from "./Progress";
+import { updateProgress } from "./updateProgress";
 
 /**
  * jlseの引数を生成する
@@ -13,7 +13,7 @@ import { Progress } from "./Progress";
  */
 const getJlseArgs = (
   ffmpegOptions: string[],
-  hwOptions: string[] | undefined
+  hwOptions: string[] | undefined,
 ) => {
   const outfile = process.env.OUTPUT;
   if (outfile === undefined) {
@@ -23,7 +23,7 @@ const getJlseArgs = (
   if (hwOptions) {
     args.push(
       "-g",
-      " -y " + hwOptions.reduce((prev, curr) => prev + " " + curr)
+      " -y " + hwOptions.reduce((prev, curr) => prev + " " + curr),
     );
   }
   return args.concat([
@@ -45,7 +45,7 @@ const getJlseArgs = (
  */
 const getJlseProcess = (
   ffmpegOptions: string[],
-  hwOptions: string[] | undefined
+  hwOptions: string[] | undefined,
 ) => {
   const env = Object.create(process.env);
   env.HOME = "/root";
@@ -53,7 +53,7 @@ const getJlseProcess = (
   return spawn("jlse", getJlseArgs(ffmpegOptions, hwOptions), { env: env });
 };
 
-//メインの処理 ここから
+// メインの処理 ここから
 
 /**
  * jlseを開始する
@@ -65,9 +65,9 @@ const getJlseProcess = (
  */
 const execJlse = async (
   ffmpegOptions: string[],
-  hwOptions: string[] | undefined = undefined
+  hwOptions: string[] | undefined = undefined,
 ) => {
-  //進捗管理用オブジェクト
+  // 進捗管理用オブジェクト
   let progress: Progress = {
     total_num: 0,
     now_num: 0,
@@ -103,7 +103,7 @@ const execJlse = async (
   });
 
   child.on("close", (code) => {
-    //終了後にしたい処理があれば書く
+    // 終了後にしたい処理があれば書く
   });
 };
 export { execJlse };

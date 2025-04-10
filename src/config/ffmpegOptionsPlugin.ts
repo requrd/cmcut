@@ -16,7 +16,7 @@ interface FfmpegOptionsPlugin {
 const getFfmpegOptions = (
   input: string | undefined,
   isDualMono: boolean,
-  plugin: FfmpegOptionsPlugin
+  plugin: FfmpegOptionsPlugin,
 ): string[] => {
   const args: string[] = [];
   if (input) {

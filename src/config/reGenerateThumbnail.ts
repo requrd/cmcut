@@ -6,7 +6,7 @@ import axios from "axios";
 const handle_error = (error: any) => {
   const { status, statusText, config } = error.response;
   console.error(
-    `Error! HTTP Status: ${status} ${statusText}\nURL:${config.url}`
+    `Error! HTTP Status: ${status} ${statusText}\nURL:${config.url}`,
   );
   throw error;
 };
@@ -34,7 +34,7 @@ const fetch_data = async (url: string, query: Object) => {
  */
 const reGenerateThumbnail = async (
   record_id: string,
-  video_file_id: string | undefined
+  video_file_id: string | undefined,
 ) => {
   try {
     const record = await fetch_data(`/api/recorded/${record_id}`, {
@@ -42,7 +42,7 @@ const reGenerateThumbnail = async (
     });
     await axios.delete(`/api/thumbnails/${record.thumbnails[0]}`);
     await axios.post(
-      `/api/thumbnails/videos/${video_file_id ?? record.videoFiles[0].id}`
+      `/api/thumbnails/videos/${video_file_id ?? record.videoFiles[0].id}`,
     );
   } catch (error) {
     handle_error(error);
