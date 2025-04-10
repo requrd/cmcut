@@ -1,23 +1,13 @@
-import { spawn } from "child_process";
+import { encode } from "./execEncode";
+import { getFfmpegOptions } from "./ffmpegOptionsPlugin";
 import { getenv } from "./getenv";
-import { getFfmpegOptions } from "./getFfmpegOptions";
+import { softwarePlugin } from "./softwareOptions";
 
-const ffmpeg = getenv("FFMPEG");
-const args = getFfmpegOptions(getenv("INPUT"));
+const command = getenv("FFMPEG");
+const args = getFfmpegOptions(getenv("INPUT"), parseInt(getenv("AUDIOCOMPONENTTYPE"), 10) == 2, softwarePlugin);
 args.push(getenv("OUTPUT"));
 
 // ここから処理開始
-const child = spawn(ffmpeg, args);
-
-child.stderr.on("data", (data) => {
-  console.error(String(data));
-});
-
-child.on("error", (err) => {
-  console.error(err);
-  throw err;
-});
-
-process.on("SIGINT", () => {
-  child.kill("SIGINT");
-});
+(async () => {
+  await encode(command, args);
+})();
