@@ -1,12 +1,14 @@
 // ref. https://github.com/plife18/docker-epgstation/blob/main/epgstation/config/enc_vaapi.js
 import { spawn } from "child_process";
 import { stat } from "node:fs/promises";
+import { getFfmpegOptions } from "./ffmpegOptionsPlugin";
 import { getDuration } from "./getDuration";
 import { getenv } from "./getenv";
-import { getVaapiOptions } from "./getVaapiOptions";
+import { vaapiPlugin } from "./vaapiOptions";
 
-const ffmpeg = getenv("FFMPEG");
-const args = getVaapiOptions(getenv("INPUT"));
+const command = getenv("FFMPEG");
+const isDualMono = parseInt(getenv("AUDIOCOMPONENTTYPE"), 10) == 2;
+const args = getFfmpegOptions(getenv("INPUT"), isDualMono, vaapiPlugin);
 args.push(getenv("OUTPUT"));
 
 function parse(line: string, duration: number) {
@@ -145,5 +147,5 @@ async function encode(command: string, args: string[]) {
   });
 }
 (async () => {
-  await encode(ffmpeg, args);
+  await encode(command, args);
 })();

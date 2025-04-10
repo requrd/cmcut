@@ -1,6 +1,4 @@
-import { FfmpegOptionsPlugin, getFfmpegOptions } from "./ffmpegOptionsPlugin";
-import { getenv } from "./getenv";
-// const videoHeight = parseInt(process.env.VIDEORESOLUTION, 10);
+import { FfmpegOptionsPlugin } from "./ffmpegOptionsPlugin";
 // ユーザー設定
 const audioBitrate = "60k";
 const qp = "25";
@@ -78,16 +76,4 @@ const vaapiPlugin: FfmpegOptionsPlugin = {
   ],
 };
 
-/**
- * FFmpeg(vaapi)のオプションを作成する
- * 引数無しで呼ばれた場合、jlse用のオプションとしてオプションを作成する
- *
- * @param {string?} input
- * @returns {string[]} FFmpegの引数となるパラメータ
- */
-const getVaapiOptions = (input: string | undefined = undefined) => {
-  const isDualMono = parseInt(getenv("AUDIOCOMPONENTTYPE"), 10) == 2;
-  return getFfmpegOptions(input, isDualMono, vaapiPlugin);
-};
-
-export { getVaapiOptions, vaapiOptions };
+export { vaapiOptions, vaapiPlugin };
