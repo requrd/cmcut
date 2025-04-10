@@ -1,9 +1,9 @@
 // ref. https://github.com/plife18/docker-epgstation/blob/main/epgstation/config/enc_vaapi.js
 import { spawn } from "child_process";
 import { stat } from "node:fs/promises";
-import { getDuration } from "./getDuration.ts";
-import { getVaapiOptions } from "./getVaapiOptions.ts";
-import { getenv } from "./getenv.ts";
+import { getDuration } from "./getDuration";
+import { getVaapiOptions } from "./getVaapiOptions";
+import { getenv } from "./getenv";
 
 const ffmpeg = getenv("FFMPEG");
 const args = getVaapiOptions(getenv("INPUT"));
@@ -28,15 +28,25 @@ args.push(getenv("OUTPUT"));
       let str = strbyline[i];
       if (str.startsWith("frame")) {
         // 想定log
-        // frame= 5159 fps= 11 q=29.0 size=  122624kB time=00:02:51.84 bitrate=5845.8kbits/s dup=19 drop=0 speed=0.372x
-        const progress = {};
+        // frame= 5159 fps= 11 q=29.0 size=  122624kB time=00:02:51.84 bitrate=5845.8kb/s dup=19 drop=0 speed=0.372x
+        const progress: {
+          frame?: number;
+          fps?: number;
+          q?: number;
+          size?: number;
+          time?: string;
+          bitrate?: number;
+          dup?: number;
+          drop?: number;
+          speed?: number;
+        } = {};
         const ffmpeg_reg =
-          /frame=\s*(?<frame>\d+)\sfps=\s*(?<fps>\d+(?:\.\d+)?)\sq=\s*(?<q>[+-]?\d+(?:\.\d+)?)\sL?size=\s*(?<size>\d+(?:\.\d+)?)kB\stime=\s*(?<time>\d+[:\.\d+]*)\sbitrate=\s*(?<bitrate>\d+(?:\.\d+)?)kbits\/s(?:\sdup=\s*(?<dup>\d+))?(?:\sdrop=\s*(?<drop>\d+))?\sspeed=\s*(?<speed>\d+(?:\.\d+)?)x/;
+          /frame=\s*(?<frame>\d+)\sfps=\s*(?<fps>\d+(?:\.\d+)?)\sq=\s*(?<q>[+-]?\d+(?:\.\d+)?)\sL?size=\s*(?<size>\d+(?:\.\d+)?)kB\stime=\s*(?<time>\d+[:\.\d+]*)\sbitrate=\s*(?<bitrate>\d+(?:\.\d+)?)kb\/s(?:\sdup=\s*(?<dup>\d+))?(?:\sdrop=\s*(?<drop>\d+))?\sspeed=\s*(?<speed>\d+(?:\.\d+)?)x/;
         let ffmatch = str.match(ffmpeg_reg);
         /**
          * match結果
          * [
-         *   'frame= 5159 fps= 11 q=29.0 size=  122624kB time=00:02:51.84 bitrate=5845.8kbits/s dup=19 drop=0 speed=0.372x',
+         *   'frame= 5159 fps= 11 q=29.0 size=  122624kB time=00:02:51.84 bitrate=5845.8kb/s dup=19 drop=0 speed=0.372x',
          *   '5159',
          *   '11',
          *   '29.0',
@@ -47,7 +57,7 @@ args.push(getenv("OUTPUT"));
          *   '0',
          *   '0.372',
          *   index: 0,
-         *   input: 'frame= 5159 fps= 11 q=29.0 size=  122624kB time=00:02:51.84 bitrate=5845.8kbits/s dup=19 drop=0 speed=0.372x    \r',
+         *   input: 'frame= 5159 fps= 11 q=29.0 size=  122624kB time=00:02:51.84 bitrate=5845.8kb/s dup=19 drop=0 speed=0.372x    \r',
          *   groups: [Object: null prototype] {
          *     frame: '5159',
          *     fps: '11',
@@ -63,21 +73,20 @@ args.push(getenv("OUTPUT"));
          */
 
         if (ffmatch === null) continue;
-
-        progress["frame"] = parseInt(ffmatch.groups.frame);
-        progress["fps"] = parseFloat(ffmatch.groups.fps);
-        progress["q"] = parseFloat(ffmatch.groups.q);
-        progress["size"] = parseInt(ffmatch.groups.size);
-        progress["time"] = ffmatch.groups.time;
-        progress["bitrate"] = parseFloat(ffmatch.groups.bitrate);
-        progress["dup"] =
-          ffmatch.groups.dup == null ? 0 : parseInt(ffmatch.groups.dup);
-        progress["drop"] =
-          ffmatch.groups.drop == null ? 0 : parseInt(ffmatch.groups.drop);
-        progress["speed"] = parseFloat(ffmatch.groups.speed);
+        if (ffmatch.groups) {
+          progress["frame"] = parseInt(ffmatch.groups.frame || "0");
+          progress["fps"] = parseFloat(ffmatch.groups.fps || "0");
+          progress["q"] = parseFloat(ffmatch.groups.q || "0");
+          progress["size"] = parseInt(ffmatch.groups.size || "0");
+          progress["time"] = ffmatch.groups.time || "0:0:0";
+          progress["bitrate"] = parseFloat(ffmatch.groups.bitrate || "0");
+          progress["dup"] = parseInt(ffmatch.groups.dup || "0");
+          progress["drop"] = parseInt(ffmatch.groups.drop || "0");
+          progress["speed"] = parseFloat(ffmatch.groups.speed || "0");
+        }
 
         let current = 0;
-        const times = progress.time.split(":");
+        const times = (progress.time || "0:0:0").split(":");
         for (let i = 0; i < times.length; i++) {
           if (i == 0) {
             current += parseFloat(times[i]) * 3600;
@@ -115,7 +124,7 @@ args.push(getenv("OUTPUT"));
 
   child.on("error", (err) => {
     console.error(err);
-    throw new Error(err);
+    throw err;
   });
 
   process.on("SIGINT", () => {
@@ -124,13 +133,13 @@ args.push(getenv("OUTPUT"));
 
   child.on("exit", async (code) => {
     console.error("Exited with code: " + String(code));
-    const output = process.env.OUTPUT;
+    const output = getenv("OUTPUT");
     console.error("Output: " + output);
-    const stats = await stat(output);
-    console.error(stats.size);
-    if (stats.size < 10 * 1024) {
+    const st = await stat(output);
+    console.error(st.size);
+    if (st.size < 10 * 1024) {
       console.error("File site too small (< 10k). Raising error");
-      throw new Error(1);
+      throw new Error("1");
     }
   });
 })();

@@ -7,7 +7,14 @@ import { Progress } from "./Progress";
  * @returns progress - 更新済みのprogress
  */
 const updateToFfmpeg = (line: string, progress: Progress) => {
-  const encoding = {};
+  const encoding: {
+    [key: string]: any;
+    frame?: number;
+    fps?: number;
+    q?: number;
+    time?: string;
+    speed?: string;
+  } = {};
   const fields = (line + " ").match(/[A-z]*=[A-z,0-9,\s,.,\/,:,-]* /g);
   if (fields === null) {
     return progress;
@@ -18,27 +25,37 @@ const updateToFfmpeg = (line: string, progress: Progress) => {
       .replace(/\r/g, "")
       .trim();
   }
-  encoding["frame"] = parseInt(encoding["frame"]);
-  encoding["fps"] = parseFloat(encoding["fps"]);
-  encoding["q"] = parseFloat(encoding["q"]);
+  encoding["frame"] = parseInt(String(encoding["frame"] || "0"));
+  encoding["fps"] = parseFloat(String(encoding["fps"] || "0"));
+  encoding["q"] = parseFloat(String(encoding["q"] || "0"));
 
   // 進捗率 1.0 で 100%
-  progress.now_num = encoding.time
-    .split(":")
-    .reduce((prev, curr, i) => prev + parseFloat(curr) * 60 ** (2 - i), 0);
+  if (encoding.time) {
+    progress.now_num = encoding.time
+      .split(":")
+      .reduce(
+        (prev: number, curr: string, i: number) =>
+          prev + parseFloat(curr) * 60 ** (2 - i),
+        0
+      );
+  } else {
+    progress.now_num = 0;
+  }
   progress.total_num = progress.duration;
   progress.log = `(${progress.step}/${progress.steps}) FFmpeg: time=${encoding.time} speed=${encoding.speed}`;
   progress.log_updated = true;
   return progress;
 };
 
-const updateToAviSynth = (line, progress) => {
+const updateToAviSynth = (line: string, progress: Progress) => {
+  const encoding: { [key: string]: any } = {};
   const raw_avisynth_data = line.replace(/AviSynth\s/, "");
-  if (raw_avisynth_data.startsWith("Creating")) {
+  const creatingMatch = raw_avisynth_data.match(
+    /Creating\slwi\sindex\sfile\s(\d+)%/
+  );
+  if (creatingMatch) {
     progress.total_num = 200;
-    progress.now_num = Number(
-      raw_avisynth_data.match(/Creating\slwi\sindex\sfile\s(\d+)%/)[1]
-    );
+    progress.now_num = Number(creatingMatch[1]);
     progress.now_num += progress.avisynth_flag ? 100 : 0;
     progress.avisynth_flag = progress.avisynth_flag
       ? true
@@ -69,18 +86,22 @@ const updateToLogoFrame = (line: string, progress: Progress) => {
 
 const updateToChapter = (line: string, progress: Progress) => {
   const raw_chapter_exe_data = line.replace(/chapter_exe\s/, "");
-  if (raw_chapter_exe_data.startsWith("\tVideo Frames")) {
-    progress.total_num = Number(
-      raw_chapter_exe_data.match(/\tVideo\sFrames:\s(\d+)\s\[\d+\.\d+fps\]/)[1]
-    );
+  const videoFramesMatch = raw_chapter_exe_data.match(
+    /\tVideo\sFrames:\s(\d+)\s\[\d+\.\d+fps\]/
+  );
+  if (videoFramesMatch) {
+    progress.total_num = Number(videoFramesMatch[1]);
     progress.log_updated = true;
   }
-  if (raw_chapter_exe_data.startsWith("mute")) {
-    progress.now_num = Number(
-      raw_chapter_exe_data.match(/mute\s?\d+:\s(\d+)\s\-\s\d+フレーム/)[1]
-    );
+
+  const muteMatch = raw_chapter_exe_data.match(
+    /mute\s?\d+:\s(\d+)\s\-\s\d+フレーム/
+  );
+  if (muteMatch) {
+    progress.now_num = Number(muteMatch[1]);
     progress.log_updated = true;
   }
+
   if (raw_chapter_exe_data.startsWith("end")) {
     progress.now_num = progress.total_num;
     progress.log_updated = true;
@@ -100,7 +121,8 @@ const applyUpdate = (line: string, progress: Progress) => {
   progress.step = 0;
   for (const [text, fn] of steps) {
     progress.step += 1;
-    if (line.startsWith(text)) {
+    const matchResult = line.match(new RegExp(`^${text}`, "i"));
+    if (matchResult) {
       try {
         return fn(line, progress);
       } catch (e) {

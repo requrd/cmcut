@@ -6,7 +6,7 @@ interface Progress {
   log_updated: boolean;
   log: string;
   duration: number;
-  steps: Number;
+  steps: number;
   step: number;
 }
 export { Progress };

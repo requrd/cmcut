@@ -3,9 +3,11 @@ import axios from "axios";
  * axiosのエラーを表示する
  * @param {Error} error
  */
-const handle_error = (error) => {
-  const { status, statusText } = error.response;
-  console.error(`Error! HTTP Status: ${status} ${statusText}\nURL:${url}`);
+const handle_error = (error: any) => {
+  const { status, statusText, config } = error.response;
+  console.error(
+    `Error! HTTP Status: ${status} ${statusText}\nURL:${config.url}`
+  );
   throw error;
 };
 /**
