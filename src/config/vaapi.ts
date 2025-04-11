@@ -4,11 +4,11 @@ import { getFfmpegOptions } from "./ffmpegOptionsPlugin";
 import { getenv } from "./getenv";
 import { vaapiPlugin } from "./vaapiOptions";
 
-const command = getenv("FFMPEG");
-const isDualMono = parseInt(getenv("AUDIOCOMPONENTTYPE"), 10) == 2;
-const args = getFfmpegOptions(getenv("INPUT"), isDualMono, vaapiPlugin);
-args.push(getenv("OUTPUT"));
-
 (async () => {
-  await encode(command, args);
+  await encode(
+    getenv("FFMPEG"),
+    getFfmpegOptions(getenv("INPUT"), parseInt(getenv("AUDIOCOMPONENTTYPE"), 10) == 2, vaapiPlugin).concat(
+      getenv("OUTPUT"),
+    ),
+  );
 })();
