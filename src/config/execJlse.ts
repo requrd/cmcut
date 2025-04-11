@@ -103,4 +103,4 @@ const execJlse = async (
     // 終了後にしたい処理があれば書く
   });
 };
-export { execJlse };
+export { execJlse, getJlseArgs };
