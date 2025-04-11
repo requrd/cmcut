@@ -4,6 +4,9 @@ import { getFfmpegOptions } from "./ffmpegOptionsPlugin";
 import { getenv } from "./getenv";
 import { softwarePlugin } from "./softwareOptions";
 
+const env = Object.create(process.env);
+env.HOME = "/root";
+
 (async () => {
   await encode(
     "jlse",
@@ -11,5 +14,6 @@ import { softwarePlugin } from "./softwareOptions";
       getFfmpegOptions(undefined, parseInt(getenv("AUDIOCOMPONENTTYPE"), 10) == 2, softwarePlugin),
       undefined,
     ),
+    env,
   );
 })();
