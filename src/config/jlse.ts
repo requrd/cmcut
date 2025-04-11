@@ -1,7 +1,7 @@
 import { encode } from "./execEncode";
-import { getJlseArgs } from "./execJlse";
 import { getFfmpegOptions } from "./ffmpegOptionsPlugin";
 import { getenv } from "./getenv";
+import { getJlseArgs } from "./getJlseArgs";
 import { softwarePlugin } from "./softwareOptions";
 
 const env = Object.create(process.env);
