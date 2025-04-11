@@ -15,10 +15,7 @@ const getJlseArgs = (
   ffmpegOptions: string[],
   hwOptions: string[] | undefined,
 ) => {
-  const outfile = process.env.OUTPUT;
-  if (outfile === undefined) {
-    throw new Error(`Environment variable $OUTPUT is required`);
-  }
+  const outfile = getenv("OUTPUT");
   const args: string[] = ["-i", getenv("INPUT"), "-e"];
   if (hwOptions) {
     args.push(
