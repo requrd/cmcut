@@ -23,10 +23,11 @@ const getFfmpegOptions = (
     if (plugin.hardwareOptions) {
       args.push(...plugin.hardwareOptions);
     }
-    args.push("-y", "-i", input);
+    args.push("-fix_sub_duration", "-y", "-i", input);
   }
   args.push(...plugin.videoStreamOptions(input === undefined));
   args.push(...plugin.audioStreamOptions(isDualMono));
+  args.push("-map", "0:s?", "-c:s", "mov_text");
   args.push(...plugin.qualityOptions);
   if (input === undefined) {
     args.push("-stats", "-aspect", "16:9");
