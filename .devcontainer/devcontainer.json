@@ -6,17 +6,13 @@
   "customizations": {
     "vscode": {
       "settings": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode",
-        "[javascript]": {
-          "editor.defaultFormatter": "esbenp.prettier-vscode"
-        }
-        // "eslit": {
-        //   "nodePath": "/app/node_modules"
-        // }
+        "editor.defaultFormatter": "dprint.dprint",
+        "editor.formatOnSave": true,
+        "dprint.path": "./node_modules/dprint/dprint"
       },
       "extensions": [
+        "dprint.dprint",
         "dbaeumer.vscode-eslint",
-        "esbenp.prettier-vscode",
         "crystal-spider.jsdoc-generator"
       ]
     }

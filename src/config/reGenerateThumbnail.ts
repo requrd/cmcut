@@ -3,9 +3,11 @@ import axios from "axios";
  * axiosのエラーを表示する
  * @param {Error} error
  */
-const handle_error = (error) => {
-  const { status, statusText } = error.response;
-  console.error(`Error! HTTP Status: ${status} ${statusText}\nURL:${url}`);
+const handle_error = (error: any) => {
+  const { status, statusText, config } = error.response;
+  console.error(
+    `Error! HTTP Status: ${status} ${statusText}\nURL:${config.url}`,
+  );
   throw error;
 };
 /**
@@ -14,7 +16,7 @@ const handle_error = (error) => {
  * @param {Object} query
  * @returns {Object}
  */
-const fetch_data = async (url, query) => {
+const fetch_data = async (url: string, query: Object) => {
   try {
     const response = await axios.get(url, {
       headers: { accept: "application/json" },
@@ -30,14 +32,17 @@ const fetch_data = async (url, query) => {
  * @param {string} record_id
  * @param {string?} video_file_id
  */
-const reGenerateThumbnail = async (record_id, video_file_id) => {
+const reGenerateThumbnail = async (
+  record_id: string,
+  video_file_id: string | undefined,
+) => {
   try {
     const record = await fetch_data(`/api/recorded/${record_id}`, {
       isHalfWidth: true,
     });
     await axios.delete(`/api/thumbnails/${record.thumbnails[0]}`);
     await axios.post(
-      `/api/thumbnails/videos/${video_file_id ?? record.videoFiles[0].id}`
+      `/api/thumbnails/videos/${video_file_id ?? record.videoFiles[0].id}`,
     );
   } catch (error) {
     handle_error(error);
@@ -55,4 +60,6 @@ const main = async () => {
   await reGenerateThumbnail(record_id, video_file_id);
 };
 
-await main();
+(async () => {
+  await main();
+})();

@@ -72,6 +72,14 @@ RUN cd /app && \
     npm run all-install && \
     npm run build
 
+RUN mkdir /tmp/encode
+COPY . /tmp/encode
+RUN cd /tmp/encode && \
+    npm i -D && \
+    npx tsc && \
+    cp dist/config/* /app/config && \
+    rm -rf /tmp/encode
+
 WORKDIR /app
 COPY config /app/config
 COPY logos /join_logo_scp_trial/logo

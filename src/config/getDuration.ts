@@ -1,12 +1,14 @@
 import { execFile } from "child_process";
-const ffprobe = process.env.FFPROBE;
+import { getenv } from "./getenv";
+
+const ffprobe = getenv("FFPROBE");
 /**
  * 動画長取得関数
  * @param {string} filePath ファイルパス
  * @return {Promise<int>} 動画長を返す (秒)
  */
-const getDuration = (filePath) => {
-  return new Promise((resolve, reject) => {
+const getDuration = (filePath: string) => {
+  return new Promise<number>((resolve, reject) => {
     execFile(
       ffprobe,
       ["-v", "0", "-show_format", "-of", "json", filePath],
@@ -23,7 +25,7 @@ const getDuration = (filePath) => {
         } catch (err) {
           reject(err);
         }
-      }
+      },
     );
   });
 };
