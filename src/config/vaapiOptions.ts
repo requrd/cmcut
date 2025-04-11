@@ -20,7 +20,7 @@ const vaapiPlugin: FfmpegOptionsPlugin = {
     const videoFilter = encodeInJlse
       ? "format=nv12,hwupload,deinterlace_vaapi"
       : "deinterlace_vaapi";
-    return ["-c:v", codec, "-vf", videoFilter];
+    return ["-map", "0:v", "-c:v", codec, "-vf", videoFilter];
   },
   audioStreamOptions: (isDualMono) => {
     const options = isDualMono
