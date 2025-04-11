@@ -6,7 +6,7 @@ import { getenv } from "./getenv";
 import { Progress } from "./Progress";
 import { updateProgress } from "./updateProgress";
 
-async function encode(command: string, args: string[], env?: Record<string, string> | undefined) {
+async function encode(command: string, args: string[]) {
   let progress: Progress = {
     total_num: 0,
     now_num: 0,
@@ -19,7 +19,9 @@ async function encode(command: string, args: string[], env?: Record<string, stri
     steps: 4,
     step: 0,
   };
-  const child = env ? spawn(command, args, { env: env }) : spawn(command, args);
+  const env = Object.create(process.env);
+  env.HOME = "/root";
+  const child = spawn(command, args, { env: env });
   // debug for ffmpeg
   // const child = spawn(ffmpeg, args, { stdio: "inherit" });
 
