@@ -13,6 +13,15 @@ interface FfmpegOptionsPlugin {
   qualityOptions: string[];
 }
 
+/**
+ * FFmpegの引数を生成する.
+ * 出力先は含まない.
+ *
+ * @param {(string | undefined)} input FFmpegで直接利用する場合、ファイルパスを指定する. jlse経由で利用する場合はundefinedを指定する.
+ * @param {boolean} isDualMono 二ヶ国語の放送の場合True.
+ * @param {FfmpegOptionsPlugin} plugin プラグイン関数でエンコード設定を指定する.
+ * @returns {string[]} FFmpegの引数リスト.
+ */
 const getFfmpegOptions = (
   input: string | undefined,
   isDualMono: boolean,

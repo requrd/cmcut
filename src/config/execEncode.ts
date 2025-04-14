@@ -6,6 +6,14 @@ import { getenv } from "./getenv";
 import { Progress } from "./Progress";
 import { updateProgress } from "./updateProgress";
 
+/**
+ * bashよりコマンド、引数を発行してエンコードを実行する.
+ *
+ * @async
+ * @param {string} command 実行するコマンドのパス
+ * @param {string[]} args 引数リスト
+ * @returns {Promise<void>}
+ */
 async function encode(command: string, args: string[]) {
   let progress: Progress = {
     total_num: 0,

@@ -3,9 +3,9 @@ import { getenv } from "./getenv";
 
 /**
  * jlseの引数を生成する
- * @param {string[]} ffmpegOptions
- * @param {string[]?} hwOptions
- * @returns {string[]}
+ * @param {string[]} ffmpegOptions ffmpeg用の引数リスト.
+ * @param {string[]?} hwOptions ffmpegの-iより前に渡す引数リスト. ハードウェアアクセラレーションを利用する場合に指定する.
+ * @returns {string[]} jlseの引数リスト.
  */
 const getJlseArgs = (
   ffmpegOptions: string[],
