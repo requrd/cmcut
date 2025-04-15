@@ -58,11 +58,19 @@ async function encode(command: string, args: string[]) {
     console.error("Exited with code: " + String(code));
     const output = getenv("OUTPUT");
     console.error("Output: " + output);
-    const st = await stat(output);
-    console.error(st.size);
-    if (st.size < 10 * 1024) {
-      console.error("File site too small (< 10k). Raising error");
-      throw new Error("1");
+    try {
+      const st = await stat(output);
+      console.error(st.size);
+      if (st.size < 10 * 1024) {
+        console.error("File site too small (< 10k). Raising error");
+        throw new Error("1");
+      }
+    } catch (e: any) {
+      if (e.message === "1") {
+        throw e;
+      } else {
+        throw new Error("File is not found. May be ffmpeg process not started.");
+      }
     }
   });
 }
