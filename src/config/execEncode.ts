@@ -2,6 +2,7 @@
 import { spawn } from "child_process";
 import { SpawnOptions } from "node:child_process";
 import { stat } from "node:fs/promises";
+import { parseArgs, ParseArgsConfig } from "node:util";
 import { getDuration } from "./getDuration";
 import { getenv } from "./getenv";
 import { Progress } from "./Progress";
@@ -15,7 +16,7 @@ import { updateProgress } from "./updateProgress";
  * @param {string[]} args 引数リスト
  * @returns {Promise<void>}
  */
-async function encode(command: string, args: string[], deubg_mode: boolean = false) {
+async function encode(command: string, args: string[]) {
   let progress: Progress = {
     total_num: 0,
     now_num: 0,
@@ -30,7 +31,9 @@ async function encode(command: string, args: string[], deubg_mode: boolean = fal
   };
   const env = Object.create(process.env);
   env.HOME = "/root";
-  const options: SpawnOptions = deubg_mode ? { stdio: "inherit", env: env } : { env: env };
+  const config: ParseArgsConfig = { options: { debug: { type: "boolean" } } };
+  const { values, positionals } = parseArgs(config);
+  const options: SpawnOptions = values.debug ? { stdio: "inherit", env: env } : { env: env };
   const child = spawn(command, args, options);
 
   /**
