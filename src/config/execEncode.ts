@@ -1,6 +1,8 @@
 // ref. https://github.com/plife18/docker-epgstation/blob/main/epgstation/config/enc_vaapi.js
 import { spawn } from "child_process";
+import { SpawnOptions } from "node:child_process";
 import { stat } from "node:fs/promises";
+import { parseArgs, ParseArgsConfig } from "node:util";
 import { getDuration } from "./getDuration";
 import { getenv } from "./getenv";
 import { Progress } from "./Progress";
@@ -29,21 +31,24 @@ async function encode(command: string, args: string[]) {
   };
   const env = Object.create(process.env);
   env.HOME = "/root";
-  const child = spawn(command, args, { env: env });
-  // debug for ffmpeg
-  // const child = spawn(ffmpeg, args, { stdio: "inherit" });
+  const config: ParseArgsConfig = { options: { debug: { type: "boolean" } } };
+  const { values, positionals } = parseArgs(config);
+  const options: SpawnOptions = values.debug ? { stdio: "inherit", env: env } : { env: env };
+  const child = spawn(command, args, options);
 
   /**
    * エンコード進捗表示用に標準出力に進捗情報を吐き出す
    * 出力する JSON
    * {"type":"progress","percent": 0.8, "log": "view log" }
    */
-  child.stderr.on("data", (data) => {
-    let lines = String(data).split("\n");
-    for (const line of lines) {
-      progress = updateProgress(line, progress);
-    }
-  });
+  if (child.stderr) {
+    child.stderr.on("data", (data) => {
+      let lines = String(data).split("\n");
+      for (const line of lines) {
+        progress = updateProgress(line, progress);
+      }
+    });
+  }
 
   child.on("error", (err) => {
     console.error(err);
@@ -58,11 +63,19 @@ async function encode(command: string, args: string[]) {
     console.error("Exited with code: " + String(code));
     const output = getenv("OUTPUT");
     console.error("Output: " + output);
-    const st = await stat(output);
-    console.error(st.size);
-    if (st.size < 10 * 1024) {
-      console.error("File site too small (< 10k). Raising error");
-      throw new Error("1");
+    try {
+      const st = await stat(output);
+      console.error(st.size);
+      if (st.size < 10 * 1024) {
+        console.error("File site too small (< 10k). Raising error");
+        throw new Error("1");
+      }
+    } catch (e: any) {
+      if (e.message === "1") {
+        throw e;
+      } else {
+        throw new Error("File is not found. May be ffmpeg process not started.");
+      }
     }
   });
 }
