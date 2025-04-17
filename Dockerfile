@@ -73,7 +73,10 @@ RUN cd /app && \
     npm run build
 
 RUN mkdir /tmp/encode
-COPY . /tmp/encode
+COPY src /tmp/encode/src
+COPY package.json /tmp/encode/package.json
+COPY package-lock.json /tmp/encode/package-lock.json
+COPY tsconfig.json /tmp/encode/tsconfig.json
 RUN cd /tmp/encode && \
     npm i -D && \
     npx tsc && \
