@@ -66,8 +66,8 @@ async function encode(command: string, args: string[]) {
     try {
       const st = await stat(output);
       console.error(st.size);
-      if (st.size < 10 * 1024) {
-        console.error("File site too small (< 10k). Raising error");
+      if (st.size < 100 * 1024 * 1024) {
+        console.error("File site too small (< 100MB). Raising error");
         throw new Error("1");
       }
     } catch (e: any) {
