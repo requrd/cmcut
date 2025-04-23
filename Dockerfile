@@ -1,4 +1,5 @@
-FROM requrd/ffmpeg-l-smash-works:vaapi-6.1.2 AS build
+FROM requrd/ffmpeg-l-smash-works:vaapi-6.1.2 AS base
+FROM base AS build
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV NODE_VERSION=18
@@ -44,7 +45,7 @@ RUN set -xe && \
     cd /tmp && \
     git clone https://github.com/l3tnun/EPGStation.git -b ${EPGSTATION_VERSION}
 
-FROM requrd/ffmpeg-l-smash-works:vaapi-6.1.2 AS release
+FROM base AS release
 ENV DEBIAN_FRONTEND=noninteractive
 ADD join_logo_scp_trial /join_logo_scp_trial
 COPY --from=build /dist/chapter_exe /join_logo_scp_trial/bin/chapter_exe
