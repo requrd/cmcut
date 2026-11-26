@@ -1,8 +1,8 @@
-import { encode } from "./execEncode";
-import { getFfmpegOptions } from "./ffmpegOptionsPlugin";
-import { getenv } from "./getenv";
-import { getJlseArgs } from "./getJlseArgs";
-import { vaapiOptions, vaapiPlugin } from "./vaapiOptions";
+import { encode } from "./execEncode.ts";
+import { getFfmpegOptions } from "./ffmpegOptionsPlugin.ts";
+import { getenv } from "./getenv.ts";
+import { getJlseArgs } from "./getJlseArgs.ts";
+import { vaapiOptions, vaapiPlugin } from "./vaapiOptions.ts";
 
 (async () => {
   await encode(

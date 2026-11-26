@@ -1,5 +1,5 @@
 import { basename, dirname, extname } from "path";
-import { getenv } from "./getenv";
+import { getenv } from "./getenv.ts";
 
 /**
  * jlseの引数を生成する
