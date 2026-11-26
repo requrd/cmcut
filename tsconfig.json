@@ -10,7 +10,9 @@
     "strict": true,
     "skipLibCheck": true,
     "rewriteRelativeImportExtensions": true,
-    "allowImportingTsExtensions": true
+    "allowImportingTsExtensions": true,
+    "verbatimModuleSyntax": true,
+    "erasableSyntaxOnly": true
   },
   "include": ["src/**/*.ts"]
 }
