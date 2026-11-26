@@ -1,8 +1,8 @@
-import { encode } from "./execEncode";
-import { getFfmpegOptions } from "./ffmpegOptionsPlugin";
-import { getenv } from "./getenv";
-import { getJlseArgs } from "./getJlseArgs";
-import { softwarePlugin } from "./softwareOptions";
+import { encode } from "./execEncode.ts";
+import { getFfmpegOptions } from "./ffmpegOptionsPlugin.ts";
+import { getenv } from "./getenv.ts";
+import { getJlseArgs } from "./getJlseArgs.ts";
+import { softwarePlugin } from "./softwareOptions.ts";
 
 (async () => {
   await encode(

@@ -1,5 +1,5 @@
-import { FfmpegOptionsPlugin, getFfmpegOptions as getOptions } from "./ffmpegOptionsPlugin";
-import { getenv } from "./getenv";
+import { FfmpegOptionsPlugin, getFfmpegOptions as getOptions } from "./ffmpegOptionsPlugin.ts";
+import { getenv } from "./getenv.ts";
 // const videoHeight = parseInt(process.env.VIDEORESOLUTION, 10);
 // ユーザー設定
 const preset = "veryfast";

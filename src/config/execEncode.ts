@@ -3,10 +3,10 @@ import { spawn } from "child_process";
 import { SpawnOptions } from "node:child_process";
 import { stat } from "node:fs/promises";
 import { parseArgs, ParseArgsConfig } from "node:util";
-import { getDuration } from "./getDuration";
-import { getenv } from "./getenv";
-import { Progress } from "./Progress";
-import { updateProgress } from "./updateProgress";
+import { getDuration } from "./getDuration.ts";
+import { getenv } from "./getenv.ts";
+import { Progress } from "./Progress.ts";
+import { updateProgress } from "./updateProgress.ts";
 
 /**
  * bashよりコマンド、引数を発行してエンコードを実行する.
