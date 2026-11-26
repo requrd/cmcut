@@ -1,5 +1,10 @@
 {
   "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "test": "node --test \"test/**/*.test.ts\"",
+    "typecheck": "tsc -p tsconfig.test.json"
+  },
   "devDependencies": {
     "@types/node": "^24.19.4",
     "axios": "^1.21.1",

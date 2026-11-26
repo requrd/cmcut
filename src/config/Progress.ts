@@ -9,4 +9,4 @@ interface Progress {
   steps: number;
   step: number;
 }
-export { Progress };
+export type { Progress };

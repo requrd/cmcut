@@ -1,11 +1,11 @@
 // ref. https://github.com/plife18/docker-epgstation/blob/main/epgstation/config/enc_vaapi.js
 import { spawn } from "child_process";
-import { SpawnOptions } from "node:child_process";
+import type { SpawnOptions } from "node:child_process";
 import { stat } from "node:fs/promises";
-import { parseArgs, ParseArgsConfig } from "node:util";
+import { parseArgs, type ParseArgsConfig } from "node:util";
 import { getDuration } from "./getDuration.ts";
 import { getenv } from "./getenv.ts";
-import { Progress } from "./Progress.ts";
+import type { Progress } from "./Progress.ts";
 import { updateProgress } from "./updateProgress.ts";
 
 /**

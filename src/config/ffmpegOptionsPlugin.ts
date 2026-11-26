@@ -44,4 +44,5 @@ const getFfmpegOptions = (
   return args;
 };
 
-export { FfmpegOptionsPlugin, getFfmpegOptions };
+export { getFfmpegOptions };
+export type { FfmpegOptionsPlugin };

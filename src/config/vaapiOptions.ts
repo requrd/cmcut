@@ -1,4 +1,4 @@
-import { FfmpegOptionsPlugin } from "./ffmpegOptionsPlugin.ts";
+import type { FfmpegOptionsPlugin } from "./ffmpegOptionsPlugin.ts";
 // ユーザー設定
 const audioBitrate = "60k";
 const qp = "25";

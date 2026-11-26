@@ -86,6 +86,9 @@ RUN cd /tmp/encode && \
 
 WORKDIR /app
 COPY config /app/config
+# 配置したスクリプトが EPGStation の環境 (ESM, /app/node_modules) で読み込めるか確認する
+RUN --mount=type=bind,source=scripts/smoke-test-config.mjs,target=/tmp/smoke-test-config.mjs \
+    node /tmp/smoke-test-config.mjs /app/config
 COPY logos /join_logo_scp_trial/logo
 ENTRYPOINT ["npm"]
 CMD ["start"]
