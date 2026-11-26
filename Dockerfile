@@ -2,8 +2,8 @@ FROM requrd/ffmpeg-l-smash-works:vaapi-6.1.2 AS base
 FROM base AS build
 
 ENV DEBIAN_FRONTEND=noninteractive
-ENV NODE_VERSION=18
-ENV EPGSTATION_VERSION=v2.9.1
+ENV NODE_VERSION=24
+ENV EPGSTATION_VERSION=v3.0.0-beta4
 
 RUN set -xe && \
     apt-get update && \
@@ -58,7 +58,7 @@ COPY --from=build /tmp/EPGStation /app
 
 WORKDIR /join_logo_scp_trial
 RUN bash setup_node.x && \
-    apt install --no-install-recommends -y nodejs libboost-filesystem-dev libboost-program-options-dev libboost-system-dev && \
+    apt install --no-install-recommends -y nodejs make g++ libboost-filesystem-dev libboost-program-options-dev libboost-system-dev && \
     node -v && \
     npm --version && \
     ls /usr/local/lib/avisynth && \
